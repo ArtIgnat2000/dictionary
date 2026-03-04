@@ -180,10 +180,7 @@ export const WorldMap: React.FC<WorldMapProps> = ({ onStartSession }) => {
         transition={{ duration: 0.5 }}
         className="mb-6"
       >
-        <h1 className="text-display mb-1">Карта миров</h1>
-        <p className="text-body" style={{ color: 'var(--text-secondary)' }}>
-          Выбери мир и начни тренировку
-        </p>
+        <h1 className="text-display mb-1">Выбери мир и начни тренировку</h1>
       </motion.div>
 
       {/* World grid */}

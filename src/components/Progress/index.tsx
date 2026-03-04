@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useProgressStore } from '../../store/progressStore';
-import { useSettingsStore } from '../../store/settingsStore';
 import { GlassCard, ProgressBar } from '../UI';
 import { WORLDS } from '../../types';
 import { isMastered } from '../../lib/spacedRepetition';
@@ -26,7 +25,6 @@ const GRADE_WORD_COUNT: Record<number, number> = {
 
 export const ProgressScreen: React.FC = () => {
   const { xp, crystals, streak, masteryMap } = useProgressStore();
-  const { childName } = useSettingsStore();
 
   const allEntries = Object.values(masteryMap);
   const practicedWords = allEntries.filter(e => e.score > 0).length;
@@ -45,8 +43,7 @@ export const ProgressScreen: React.FC = () => {
   return (
     <div className="flex flex-col gap-6">
       <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-display mb-1">Прогресс{childName ? `, ${childName}` : ''}</h1>
-        <p className="text-body" style={{ color: 'var(--text-secondary)' }}>Твои достижения</p>
+        <h1 className="text-display mb-1">Твои достижения</h1>
       </motion.div>
 
       {/* Stats grid */}
