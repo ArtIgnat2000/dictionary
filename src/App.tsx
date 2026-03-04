@@ -5,6 +5,7 @@ import { WorldMap } from './components/WorldMap';
 import { SessionEngine } from './components/Session';
 import { ProgressScreen } from './components/Progress';
 import { SettingsScreen } from './components/Settings';
+import { QuickStartScreen } from './components/QuickStart';
 import { Mascot, MascotProvider } from './components/Mascot';
 import { useTheme } from './hooks/useTheme';
 import { useProgressStore } from './store/progressStore';
@@ -130,13 +131,15 @@ const AppContent: React.FC = () => {
   }
 
   const renderPage = () => {
+    // Активная сессия перекрывает любой раздел
+    if (sessionGrade !== null) {
+      return <SessionEngine grade={sessionGrade} onComplete={handleSessionComplete} />;
+    }
     switch (page) {
       case 'map':
         return <WorldMap onStartSession={handleStartSession} />;
       case 'study':
-        return sessionGrade
-          ? <SessionEngine grade={sessionGrade} onComplete={handleSessionComplete} />
-          : <WorldMap onStartSession={handleStartSession} />;
+        return <QuickStartScreen onStartSession={handleStartSession} />;
       case 'progress':
         return <ProgressScreen />;
       case 'settings':
