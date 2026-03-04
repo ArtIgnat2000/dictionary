@@ -84,8 +84,9 @@ const WorldCard: React.FC<WorldCardProps> = ({
         )}
 
         <div className="text-4xl mb-2">{world.emoji}</div>
-        <h3 className="text-title text-white mb-0.5">{world.name}</h3>
-        <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 14, fontWeight: 500, marginBottom: 12 }}>
+        <h3 className="text-title text-white mb-0.5"
+          style={{ textShadow: '0 1px 4px rgba(0,0,0,0.25)' }}>{world.name}</h3>
+        <p style={{ color: '#fff', fontSize: 15, fontWeight: 600, marginBottom: 12, textShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>
           {world.subtitle}
         </p>
 
@@ -93,11 +94,11 @@ const WorldCard: React.FC<WorldCardProps> = ({
           <>
             <ProgressBar value={pct} className="mb-2" />
             <div className="flex items-center justify-between mb-3">
-              <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: 12, fontWeight: 600 }}>
+              <p style={{ color: '#fff', fontSize: 14, fontWeight: 700, textShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>
                 В работе: {practiced} / {totalCount} слов
               </p>
               {mastered > 0 && (
-                <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: 12, fontWeight: 600 }}>
+                <p style={{ color: '#fff', fontSize: 14, fontWeight: 700, textShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>
                   ⭐ {mastered}
                 </p>
               )}
@@ -110,17 +111,20 @@ const WorldCard: React.FC<WorldCardProps> = ({
                   whileTap={{ scale: 0.9 }}
                   onClick={() => onSelectGrade(g)}
                   style={{
-                    padding: '5px 14px',
-                    borderRadius: 20,
+                    padding: '9px 20px',
+                    borderRadius: 24,
                     border: 'none',
-                    fontSize: 13,
+                    fontSize: 15,
                     fontWeight: 700,
                     cursor: 'pointer',
                     background: activeGrade === g
-                      ? 'rgba(255,255,255,0.95)'
-                      : 'rgba(255,255,255,0.28)',
+                      ? 'rgba(255,255,255,0.97)'
+                      : 'rgba(255,255,255,0.32)',
                     color: activeGrade === g ? world.colorTo : '#fff',
+                    textShadow: activeGrade === g ? 'none' : '0 1px 3px rgba(0,0,0,0.2)',
+                    boxShadow: activeGrade === g ? '0 2px 8px rgba(0,0,0,0.15)' : 'none',
                     transition: 'background 0.2s',
+                    minHeight: 42,
                   }}
                 >
                   {g} кл.
