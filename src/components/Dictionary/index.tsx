@@ -23,6 +23,14 @@ const GRADE_DATA: Record<number, Word[]> = {
 
 const ALL_WORDS: Word[] = Object.values(GRADE_DATA).flat();
 
+// Deduplicated list for the 'all grades' view
+const ALL_WORDS_UNIQUE: Word[] = [];
+const _seen = new Set<string>();
+for (const w of ALL_WORDS) {
+  const key = w.text.toLowerCase();
+  if (!_seen.has(key)) { _seen.add(key); ALL_WORDS_UNIQUE.push(w); }
+}
+
 // Highlight matching substring
 function Highlight({ text, query }: { text: string; query: string }) {
   if (!query) return <>{text}</>;
@@ -43,7 +51,7 @@ export const DictionaryScreen: React.FC = () => {
   const [activeGrade, setActiveGrade] = useState<number | 'all'>('all');
   const [search, setSearch] = useState('');
 
-  const sourceList = activeGrade === 'all' ? ALL_WORDS : (GRADE_DATA[activeGrade] ?? []);
+  const sourceList = activeGrade === 'all' ? ALL_WORDS_UNIQUE : (GRADE_DATA[activeGrade] ?? []);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -57,7 +65,7 @@ export const DictionaryScreen: React.FC = () => {
   }, [sourceList, search]);
 
   const totalCount = activeGrade === 'all'
-    ? ALL_WORDS.length
+    ? ALL_WORDS_UNIQUE.length
     : (GRADE_DATA[activeGrade as number]?.length ?? 0);
 
   return (
@@ -143,9 +151,6 @@ export const DictionaryScreen: React.FC = () => {
               >
                 <span style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-color)', letterSpacing: '-0.01em', wordBreak: 'break-word' }}>
                   <Highlight text={word.text} query={search.trim()} />
-                </span>
-                <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', letterSpacing: '0.03em' }}>
-                  <Highlight text={word.hint} query={search.trim()} />
                 </span>
               </motion.div>
             ))}
