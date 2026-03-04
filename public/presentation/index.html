@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Академия СЛОВО — Презентация проекта</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:      #020617;
+      --surface: #0f172a;
+      --card:    #1e293b;
+      --border:  #334155;
+      --accent:  #38bdf8;
+      --accent2: #818cf8;
+      --accent3: #34d399;
+      --orange:  #fb923c;
+      --text:    #f1f5f9;
+      --muted:   #94a3b8;
+      --subtle:  #cbd5e1;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* ── Slides ── */
+    #slides { flex:1; position:relative; overflow:hidden; }
+    .slide {
+      position: absolute; inset:0;
+      display: flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      padding: 3rem 4rem;
+      opacity:0; pointer-events:none;
+      transition: opacity .35s ease, transform .35s ease;
+      transform: translateX(60px);
+      overflow-y: auto;
+    }
+    .slide.active   { opacity:1; pointer-events:auto; transform:translateX(0); }
+    .slide.prev     { opacity:0; transform:translateX(-60px); }
+    .slide.col      { flex-direction:column; }
+    .slide.left     { align-items:flex-start; }
+
+    /* ── Typography ── */
+    h1.display { font-size: clamp(2.4rem,5vw,4rem); font-weight:900; letter-spacing:-.04em; line-height:1.05; }
+    h2.title   { font-size: clamp(1.5rem,3vw,2.2rem); font-weight:800; letter-spacing:-.03em; }
+    h3.card-h  { font-size:1.05rem; font-weight:700; color: var(--accent); margin-bottom:.3rem; }
+    p.lead     { font-size:clamp(1rem,2vw,1.2rem); color:var(--subtle); line-height:1.6; }
+    .label     { font-size:.75rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:.5rem; }
+    .accent    { color: var(--accent); }
+    .accent2   { color: var(--accent2); }
+    .accent3   { color: var(--accent3); }
+    .orange    { color: var(--orange); }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--card);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:1.25rem 1.5rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,.4);
+    }
+    .card-row { display:flex; align-items:center; gap:1.25rem; }
+    .card-icon { font-size:2.4rem; flex-shrink:0; line-height:1; }
+    .cards-col { display:flex; flex-direction:column; gap:1rem; width:100%; max-width:860px; }
+    .cards-grid { display:grid; gap:1rem; width:100%; max-width:860px; }
+    .cards-grid.g2 { grid-template-columns: repeat(2,1fr); }
+    .cards-grid.g3 { grid-template-columns: repeat(3,1fr); }
+    .card.center { text-align:center; display:flex; flex-direction:column; align-items:center; gap:.5rem; }
+
+    /* ── Slide counter ── */
+    .counter {
+      position:absolute; bottom:1rem; right:1.5rem;
+      font-size:.8rem; color:var(--muted); font-weight:600;
+    }
+
+    /* ── Navigation ── */
+    #nav {
+      display:flex; justify-content:center; align-items:center;
+      gap:1rem; padding:.75rem 1.5rem;
+      background:var(--surface); border-top:1px solid var(--border);
+      flex-shrink:0;
+    }
+    .nav-btn {
+      background:var(--card); color:var(--accent);
+      border:1px solid var(--accent); border-radius:8px;
+      padding:.45rem 1.25rem; font-size:.9rem; font-weight:700;
+      cursor:pointer; transition:background .2s;
+      font-family:inherit;
+    }
+    .nav-btn:hover   { background:rgba(56,189,248,.15); }
+    .nav-btn:disabled { opacity:.35; cursor:default; }
+    #slide-info { font-size:.9rem; color:var(--subtle); font-weight:600; min-width:60px; text-align:center; }
+
+    /* ── Phone mockup ── */
+    .phone {
+      width:220px; flex-shrink:0;
+      background:#0f172a; border:2.5px solid #334155;
+      border-radius:36px; overflow:hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,.6), 0 0 0 1px #475569;
+    }
+    .phone-bar { height:26px; background:#1e293b; display:flex; align-items:center; justify-content:center; }
+    .phone-notch { width:60px; height:10px; background:#0f172a; border-radius:0 0 10px 10px; }
+    .phone-screen { background:#F5F5F7; padding:10px; }
+    .phone-screen.dark { background:#1c1c1e; }
+
+    /* App UI Elements */
+    .app-header { background:#fff; padding:10px 12px 6px; border-bottom:1px solid #e5e5ea; }
+    .app-title-sm { font-size:12px; font-weight:800; color:#1D1D1F; }
+    .app-subtitle-sm { font-size:9px; color:#6E6E73; font-weight:500; }
+    .world-card {
+      border-radius:14px; padding:10px; margin:6px 0;
+      color:#fff; position:relative; overflow:hidden;
+    }
+    .world-card .wc-title { font-size:11px; font-weight:800; margin:2px 0 1px; }
+    .world-card .wc-sub   { font-size:8px; opacity:.9; }
+    .world-card .wc-stat  { font-size:8px; margin-top:4px; opacity:.9; }
+    .wc-btns { display:flex; gap:4px; margin-top:5px; }
+    .wc-btn  { padding:3px 8px; border-radius:10px; font-size:8px; font-weight:700; background:rgba(255,255,255,.3); color:#fff; }
+    .wc-btn.active { background:rgba(255,255,255,.95); color:#FF9F0A; }
+    .prog-track { height:3px; background:rgba(255,255,255,.25); border-radius:2px; margin-top:4px; }
+    .prog-fill  { height:3px; border-radius:2px; background:#fff; }
+
+    .game-area { background:#fff; border-radius:12px; padding:10px; margin:6px 0; }
+    .game-label { font-size:8px; color:#6E6E73; font-weight:600; margin-bottom:4px; }
+    .game-word  { font-size:16px; font-weight:900; color:#1D1D1F; text-align:center; letter-spacing:.05em; }
+    .game-task  { font-size:8px; color:#6E6E73; margin:4px 0; text-align:center; }
+    .key-row  { display:flex; gap:2px; justify-content:center; margin-top:3px; }
+    .key-btn  { background:#fff; border:1px solid #e5e5ea; border-radius:4px; padding:3px 4px; font-size:7px; font-weight:700; color:#1D1D1F; box-shadow:0 1px 2px rgba(0,0,0,.1); }
+    .answer-field { border:2px solid #007AFF; border-radius:8px; padding:4px 8px; text-align:center; font-size:11px; font-weight:700; color:#007AFF; margin:4px 0; }
+    .hint-btn { background:rgba(0,122,255,.1); border-radius:8px; padding:3px 8px; font-size:7px; font-weight:700; color:#007AFF; margin-top:3px; }
+
+    .stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:4px; margin:6px 0; }
+    .stat-card { background:#fff; border-radius:10px; padding:6px; text-align:center; }
+    .stat-emoji { font-size:14px; }
+    .stat-val   { font-size:12px; font-weight:800; color:#007AFF; }
+    .stat-lbl   { font-size:7px; color:#6E6E73; font-weight:600; }
+
+    .prog-bar-container { background:#fff; border-radius:10px; padding:8px; margin:4px 0; }
+    .prog-row { display:flex; justify-content:space-between; margin-bottom:3px; }
+    .prog-lbl { font-size:8px; font-weight:600; color:#1D1D1F; }
+    .prog-val { font-size:8px; font-weight:700; color:#6E6E73; }
+    .prog-t { height:4px; background:#e5e5ea; border-radius:2px; overflow:hidden; }
+    .prog-f { height:4px; border-radius:2px; }
+
+    /* ── Badges ── */
+    .badge { display:inline-flex; align-items:center; gap:.35rem;
+      background:rgba(56,189,248,.12); border:1px solid rgba(56,189,248,.3);
+      border-radius:8px; padding:.3rem .75rem; font-size:.8rem; font-weight:700; color:var(--accent); }
+    .badge.green { background:rgba(52,211,153,.12); border-color:rgba(52,211,153,.3); color:var(--accent3); }
+    .badge.purple { background:rgba(129,140,248,.12); border-color:rgba(129,140,248,.3); color:var(--accent2); }
+    .badge.orange { background:rgba(251,146,60,.12); border-color:rgba(251,146,60,.3); color:var(--orange); }
+    .badges-row { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1rem; }
+
+    /* ── Big stat circle ── */
+    .big-stat { text-align:center; }
+    .big-stat .num { font-size:clamp(3rem,7vw,5.5rem); font-weight:900; letter-spacing:-.05em; line-height:1; }
+    .big-stat .lbl { font-size:.9rem; font-weight:600; color:var(--muted); margin-top:.25rem; }
+
+    /* ── Timeline ── */
+    .timeline { display:flex; flex-direction:column; gap:.75rem; max-width:700px; width:100%; }
+    .tl-item { display:flex; gap:1rem; align-items:flex-start; }
+    .tl-dot  { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; margin-top:.15rem; }
+
+    /* ── Split layout ── */
+    .split { display:flex; gap:3rem; align-items:center; width:100%; max-width:960px; }
+    .split .left  { flex:1; }
+    .split .right { flex-shrink:0; }
+
+    /* ── Grad text ── */
+    .grad { background: linear-gradient(135deg, #38bdf8, #818cf8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .grad2{ background: linear-gradient(135deg, #34d399, #38bdf8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .grad3{ background: linear-gradient(135deg, #fb923c, #f472b6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+    /* ── Progress bar fill colors ── */
+    .fill-blue   { background: linear-gradient(90deg,#3b82f6,#60a5fa); }
+    .fill-amber  { background: linear-gradient(90deg,#f59e0b,#fbbf24); }
+    .fill-sky    { background: linear-gradient(90deg,#0ea5e9,#38bdf8); }
+    .fill-purple { background: linear-gradient(90deg,#8b5cf6,#a78bfa); }
+    .fill-green  { background: linear-gradient(90deg,#22c55e,#4ade80); }
+
+    /* ── Responsive ── */
+    @media (max-width:700px) {
+      .slide { padding:1.5rem 1.2rem; }
+      h1.display { font-size:2rem; }
+      .cards-grid.g3 { grid-template-columns:1fr 1fr; }
+      .split { flex-direction:column; }
+      .split .right { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="slides">
+
+  <!-- ═══════════════════════════════════════════════════════════ SLIDE 1 — TITLE -->
+  <section class="slide active" style="background:radial-gradient(ellipse at 30% 0%, rgba(56,189,248,.18) 0%, transparent 60%), var(--bg);">
+    <div style="text-align:center; max-width:800px;">
+      <div style="font-size:5rem; margin-bottom:1rem;">📚</div>
+      <h1 class="display grad" style="margin-bottom:1rem;">Академия СЛОВО</h1>
+      <p class="lead" style="margin-bottom:2rem; font-size:1.3rem;">
+        Обучающее веб-приложение для изучения<br>словарных слов русского языка
+      </p>
+      <div class="badges-row" style="justify-content:center; margin-bottom:2rem;">
+        <span class="badge">🎮 Игровой формат</span>
+        <span class="badge green">📱 PWA-приложение</span>
+        <span class="badge purple">🧠 ИИ-алгоритм SM-2</span>
+        <span class="badge orange">🆓 Бесплатно</span>
+      </div>
+      <p style="color:var(--muted); font-size:.95rem; font-weight:600;">
+        Проект Виктора Игнатьева&nbsp;·&nbsp;НААШ 186&nbsp;·&nbsp;2026
+      </p>
+    </div>
+    <div class="counter">1 / 15</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ SLIDE 2 — ПРОБЛЕМА -->
+  <section class="slide" style="background:var(--surface);">
+    <h2 class="title" style="text-align:left; width:100%; max-width:860px; margin-bottom:1.5rem;">
+      😟 В чём <span class="accent">проблема?</span>
+    </h2>
+    <div class="cards-col">
+      <div class="card card-row">
+        <div class="card-icon">📉</div>
+        <div>
+          <h3 class="card-h">Ошибки в словах</h3>
+          <p style="color:var(--subtle); font-size:.9rem;">По данным исследований, 60% школьников допускают ошибки в базовых словарных словах даже к 5-му классу</p>
+        </div>
+      </div>
+      <div class="card card-row">
+        <div class="card-icon">😴</div>
+        <div>
+          <h3 class="card-h">Скучная зубрёжка не работает</h3>
+          <p style="color:var(--subtle); font-size:.9rem;">Традиционный метод — переписать слово 10 раз. Дети мотивированы подписью, а не запоминанием. Через неделю всё забывается</p>
+        </div>
+      </div>
+      <div class="card card-row">
+        <div class="card-icon">📵</div>
+        <div>
+          <h3 class="card-h">Нет удобного инструмента</h3>
+          <p style="color:var(--subtle); font-size:.9rem;">Существующие приложения — дорогие, перегружены, требуют регистрации. Нужна простая, приятная и умная альтернатива</p>
+        </div>
+      </div>
+    </div>
+    <div class="counter">2 / 15</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ SLIDE 3 — РЕШЕНИЕ -->
+  <section class="slide" style="background:radial-gradient(ellipse at 70% 50%, rgba(52,211,153,.1) 0%, transparent 60%), var(--surface);">
+    <div style="text-align:center; max-width:860px; width:100%;">
+      <div style="font-size:3.5rem; margin-bottom:.75rem;">🎮</div>
+      <h2 class="title grad2" style="margin-bottom:1rem;">Учёба = Игра</h2>
+      <p class="lead" style="margin-bottom:2rem;">
+        Академия СЛОВО превращает изучение словарных слов<br>в увлекательное игровое приключение
+      </p>
+      <div class="cards-grid g3">
+        <div class="card center" style="border-color:rgba(56,189,248,.3);">
+          <div style="font-size:2.2rem;">🏆</div>
+          <h3 class="card-h">Очки и награды</h3>
+          <p style="font-size:.82rem; color:var(--subtle);">XP, кристаллы и серии дней мотивируют заниматься каждый день</p>
+        </div>
+        <div class="card center" style="border-color:rgba(52,211,153,.3);">
+          <div style="font-size:2.2rem;">🗺️</div>
+          <h3 class="card-h">Карта миров</h3>
+          <p style="font-size:.82rem; color:var(--subtle);">5 волшебных миров с нарастающей сложностью — 1 по 11 класс</p>
+        </div>
+        <div class="card center" style="border-color:rgba(251,146,60,.3);">
+          <div style="font-size:2.2rem;">🦉</div>
+          <h3 class="card-h">Маскот БУК</h3>
+          <p style="font-size:.82rem; color:var(--subtle);">Живой помощник-сова реагирует на успехи, подбадривает и хвалит</p>
+        </div>
+      </div>
+    </div>
+    <div class="counter">3 / 15</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ SLIDE 4 — КАРТА МИРОВ (скриншот) -->
+  <section class="slide" style="background:var(--surface);">
+    <div class="split" style="max-width:900px; width:100%;">
+      <div class="left">
+        <div class="label">Главный экран</div>
+        <h2 class="title" style="margin-bottom:1rem;">Карта <span class="accent">миров</span></h2>
+        <div class="cards-col" style="gap:.6rem;">
+          <div class="card card-row" style="padding:.75rem 1rem;">
+            <div style="font-size:1.6rem; flex-shrink:0;">🌲</div>
+            <div><h3 class="card-h" style="font-size:.9rem;">Волшебный лес</h3><p style="font-size:.8rem;color:var(--subtle);">1–2 класс · 60 слов</p></div>
+          </div>
+          <div class="card card-row" style="padding:.75rem 1rem; border-color:rgba(251,146,60,.4);">
+            <div style="font-size:1.6rem; flex-shrink:0;">🏡</div>
+            <div><h3 class="card-h" style="font-size:.9rem;">Деревня мастеров</h3><p style="font-size:.8rem;color:var(--subtle);">3–4 класс · 112 слов</p></div>
+          </div>
+          <div class="card card-row" style="padding:.75rem 1rem; border-color:rgba(56,189,248,.4);">
+            <div style="font-size:1.6rem; flex-shrink:0;">⛵</div>
+            <div><h3 class="card-h" style="font-size:.9rem;">Морской порт</h3><p style="font-size:.8rem;color:var(--subtle);">5–6 класс · 245 слов</p></div>
+          </div>
+          <div class="card card-row" style="padding:.75rem 1rem; border-color:rgba(129,140,248,.4);">
+            <div style="font-size:1.6rem; flex-shrink:0;">⛰️</div>
+            <div><h3 class="card-h" style="font-size:.9rem;">Горная экспедиция</h3><p style="font-size:.8rem;color:var(--subtle);">7–9 класс · 199 слов</p></div>
+          </div>
+          <div class="card card-row" style="padding:.75rem 1rem; border-color:rgba(52,211,153,.4);">
+            <div style="font-size:1.6rem; flex-shrink:0;">🚀</div>
+            <div><h3 class="card-h" style="font-size:.9rem;">Космическая база</h3><p style="font-size:.8rem;color:var(--subtle);">10–11 класс · 165 слов</p></div>
+          </div>
+        </div>
+      </div>
+      <!-- Phone mockup -->
+      <div class="right">
+        <div class="phone">
+          <div class="phone-bar"><div class="phone-notch"></div></div>
+          <div class="phone-screen" style="min-height:440px;">
+            <div class="app-header">
+              <div class="app-title-sm">Карта миров</div>
+              <div class="app-subtitle-sm">Выбери мир и начни тренировку</div>
+            </div>
+            <!-- World cards -->
+            <div class="world-card" style="background:linear-gradient(135deg,#4ade80,#22c55e);">
+              <div style="font-size:16px;">🌲</div>
+              <div class="wc-title">Волшебный лес</div>
+              <div class="wc-sub">1–2 класс</div>
+              <div class="prog-track"><div class="prog-fill" style="width:0%;"></div></div>
+              <div class="wc-stat">В работе: 0 / 60 слов</div>
+              <div class="wc-btns"><span class="wc-btn">1 кл.</span><span class="wc-btn">2 кл.</span></div>
+            </div>
+            <div class="world-card" style="background:linear-gradient(135deg,#fb923c,#f97316);">
+              <div style="font-size:16px; position:absolute; right:8px; top:8px; background:rgba(255,255,255,.3); border-radius:8px; padding:2px 6px; font-size:7px; font-weight:700;">▶ Текущий</div>
+              <div style="font-size:16px;">🏡</div>
+              <div class="wc-title">Деревня мастеров</div>
+              <div class="wc-sub">3–4 класс</div>
+              <div class="prog-track"><div class="prog-fill" style="width:15%;background:rgba(255,255,255,.9);"></div></div>
+              <div class="wc-stat">В работе: 2 / 112 слов</div>
+              <div class="wc-btns"><span class="wc-btn">3 кл.</span><span class="wc-btn active">4 кл.</span></div>
+            </div>
+            <div class="world-card" style="background:linear-gradient(135deg,#38bdf8,#0284c7);">
+              <div style="font-size:16px;">⛵</div>
+              <div class="wc-title">Морской порт</div>
+              <div class="wc-sub">5–6 класс</div>
+              <div class="prog-track"><div class="prog-fill" style="width:0%;"></div></div>
+              <div class="wc-stat">В работе: 0 / 245 слов</div>
+              <div class="wc-btns"><span class="wc-btn">5 кл.</span><span class="wc-btn">6 кл.</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="counter">4 / 15</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ SLIDE 5 — 6 ИГР -->
+  <section class="slide" style="background:radial-gradient(ellipse at 20% 80%, rgba(129,140,248,.12) 0%, transparent 60%), var(--surface);">
+    <h2 class="title" style="text-align:left; width:100%; max-width:860px; margin-bottom:1.5rem;">
+      🎲 Шесть <span class="accent2">мини-игр</span> — не надоедает!
+    </h2>
+    <div class="cards-grid g2" style="max-width:860px;">
+      <div class="card card-row">
+        <div class="card-icon">🎤</div>
+        <div>
+          <h3 class="card-h">Диктант</h3>
+          <p style="font-size:.85rem;color:var(--subtle);">Слово произносится вслух — нужно написать его по памяти, не видя букв</p>
+        </div>
+      </div>
+      <div class="card card-row">
+        <div class="card-icon">🧩</div>
+        <div>
+          <h3 class="card-h">Собери слово</h3>
+          <p style="font-size:.85rem;color:var(--subtle);">Нажимай буквы на клавиатуре в правильном порядке — есть подсказка!</p>
+        </div>
+      </div>
+      <div class="card card-row">
+        <div class="card-icon">✏️</div>
+        <div>
+          <h3 class="card-h">Заполни пропуск</h3>
+          <p style="font-size:.85rem;color:var(--subtle);">Предложение с пропущенным словом — нужно вставить правильное</p>
+        </div>
+      </div>
+      <div class="card card-row">
+        <div class="card-icon">🤖</div>
+        <div>
+          <h3 class="card-h">Исправь робота</h3>
+          <p style="font-size:.85rem;color:var(--subtle);">Робот написал с ошибкой — найди её и напиши слово правильно</p>
+        </div>
+      </div>
+      <div class="card card-row">
+        <div class="card-icon">⚡</div>
+        <div>
+          <h3 class="card-h">Скоростной поезд</h3>
+          <p style="font-size:.85rem;color:var(--subtle);">Слова мелькают быстро — выбери правильное написание, не успеешь — проиграл!</p>
+        </div>
+      </div>
+      <div class="card card-row">
+        <div class="card-icon">🃏</div>
+        <div>
+          <h3 class="card-h">Собери выражение</h3>
+          <p style="font-size:.85rem;color:var(--subtle);">Карточки-слова перестали — расставь их в нужном порядке (для устойчивых выражений)</p>
+        </div>
+      </div>
+    </div>
+    <div class="counter">5 / 15</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ SLIDE 6 — ИГРА В ДЕЙСТВИИ (скриншот) -->
+  <section class="slide" style="background:var(--surface);">
+    <div class="split" style="max-width:900px; width:100%;">
+      <div class="left">
+        <div class="label">Игровой процесс</div>
+        <h2 class="title" style="margin-bottom:1rem;">Учёба <span class="accent">без скуки</span></h2>
+        <div class="cards-col" style="gap:.8rem;">
+          <div class="card card-row" style="border-color:rgba(56,189,248,.35);">
+            <div class="card-icon">💡</div>
+            <div>
+              <h3 class="card-h">Умная подсказка</h3>
+              <p style="font-size:.85rem;color:var(--subtle);">Нажми — откроется следующая буква. Но за подсказку нельзя получить полные очки</p>
+            </div>
+          </div>
+          <div class="card card-row" style="border-color:rgba(52,211,153,.35);">
+            <div class="card-icon">🔊</div>
+            <div>
+              <h3 class="card-h">Произношение</h3>
+              <p style="font-size:.85rem;color:var(--subtle);">Каждое слово озвучивается на русском языке — тренируешь слух и написание одновременно</p>
+            </div>
+          </div>
+          <div class="card card-row" style="border-color:rgba(251,146,60,.35);">
+            <div class="card-icon">⭐</div>
+            <div>
+              <h3 class="card-h">3 звезды за сессию</h3>
+              <p style="font-size:.85rem;color:var(--subtle);">За безупречное выполнение сессии — бонусные XP и реакция маскота БУКа</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Phone mockup: game screen -->
+      <div class="right">
+        <div class="phone">
+          <div class="phone-bar"><div class="phone-notch"></div></div>
+          <div class="phone-screen" style="min-height:440px;">
+            <div class="app-header" style="display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <div class="app-title-sm">3 / 7 слов</div>
+                <div class="app-subtitle-sm">🧩 Собери слово</div>
+              </div>
+              <div style="font-size:9px;background:#F5F5F7;padding:2px 6px;border-radius:6px;color:#007AFF;font-weight:700;">⚡ 30 XP</div>
+            </div>
+            <!-- progress bar -->
+            <div style="height:3px;background:#e5e5ea;margin:4px 0;border-radius:2px;"><div style="height:3px;width:40%;background:#007AFF;border-radius:2px;"></div></div>
+            <!-- card -->
+            <div class="game-area">
+              <div class="game-label">🔊 Нажми, чтобы услышать</div>
+              <div style="background:#007AFF;border-radius:8px;padding:10px;text-align:center;cursor:pointer;">
+                <div style="font-size:20px;">📢</div>
+                <div style="font-size:9px;color:rgba(255,255,255,.8);font-weight:600;">Произнести слово</div>
+              </div>
+              <!-- answer field -->
+              <div class="answer-field">к _ _ _ е _ _ _ _ я</div>
+              <!-- hint -->
+              <div style="text-align:center;">
+                <span class="hint-btn">💡 Подсказка (−10 XP)</span>
+              </div>
+            </div>
+            <!-- keyboard rows -->
+            <div style="padding:2px 0;">
+              <div class="key-row">
+                <span class="key-btn">й</span><span class="key-btn">ц</span><span class="key-btn">у</span><span class="key-btn">к</span><span class="key-btn">е</span><span class="key-btn">н</span><span class="key-btn">г</span><span class="key-btn">ш</span><span class="key-btn">щ</span><span class="key-btn">з</span>
+              </div>
+              <div class="key-row" style="margin-top:2px;">
+                <span class="key-btn">ф</span><span class="key-btn">ы</span><span class="key-btn">в</span><span class="key-btn">а</span><span class="key-btn">п</span><span class="key-btn">р</span><span class="key-btn">о</span><span class="key-btn">л</span><span class="key-btn">д</span>
+              </div>
+              <div class="key-row" style="margin-top:2px;">
+                <span class="key-btn">я</span><span class="key-btn">ч</span><span class="key-btn">с</span><span class="key-btn">м</span><span class="key-btn">и</span><span class="key-btn">т</span><span class="key-btn">ь</span><span class="key-btn">б</span><span class="key-btn" style="background:#e5e5ea;">⌫</span>
+              </div>
+            </div>
+            <!-- mascot hint -->
+            <div style="display:flex;align-items:flex-end;gap:4px;margin-top:6px;justify-content:flex-end;">
+              <div style="background:#fff;border-radius:10px 10px 2px 10px;padding:4px 8px;font-size:7px;font-weight:600;color:#1D1D1F;box-shadow:0 2px 6px rgba(0,0,0,.1);">Ты можешь! 💪</div>
+              <div style="font-size:28px;">🦉</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="counter">6 / 15</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ SLIDE 7 — МОТИВАЦИЯ -->
+  <section class="slide" style="background:radial-gradient(ellipse at 80% 20%, rgba(251,146,60,.12) 0%, transparent 50%), var(--surface);">
+    <h2 class="title" style="text-align:left; width:100%; max-width:860px; margin-bottom:1.5rem;">
+      🏆 Система <span class="orange">мотивации</span> — хочется играть снова!
+    </h2>
+    <div class="cards-col">
+      <div class="card card-row" style="border-color:rgba(56,189,248,.3);">
+        <div class="card-icon">⚡</div>
+        <div style="flex:1;">
+          <h3 class="card-h">Очки опыта (XP)</h3>
+          <p style="font-size:.85rem;color:var(--subtle);">+15 XP за правильный ответ без подсказки · +5 XP с подсказкой · бонус за 3 звезды сессии</p>
+        </div>
+        <div style="font-size:1.4rem; font-weight:900; color:var(--accent);">⚡ XP</div>
+      </div>
+      <div class="card card-row" style="border-color:rgba(129,140,248,.3);">
+        <div class="card-icon">💎</div>
+        <div style="flex:1;">
+          <h3 class="card-h">Кристаллы</h3>
+          <p style="font-size:.85rem;color:var(--subtle);">Особая валюта за серии правильных ответов — только без подсказок!</p>
+        </div>
+        <div style="font-size:1.4rem; font-weight:900; color:var(--accent2);">💎</div>
+      </div>
+      <div class="card card-row" style="border-color:rgba(251,146,60,.3);">
+        <div class="card-icon">🔥</div>
+        <div style="flex:1;">
+          <h3 class="card-h">Серия дней</h3>
+          <p style="font-size:.85rem;color:var(--subtle);">Занимайся каждый день — серия растёт. Пропустил день — серия сбрасывается. Мотивирует к регулярности!</p>
+        </div>
+        <div style="font-size:1.4rem; font-weight:900; color:var(--orange);">🔥</div>
+      </div>
+      <div class="card card-row" style="border-color:rgba(52,211,153,.3);">
+        <div class="card-icon">⭐</div>
+        <div style="flex:1;">
+          <h3 class="card-h">Звёзды за сессию</h3>
+          <p style="font-size:.85rem;color:var(--subtle);">1–3 звезды в конце каждой тренировки · 3 звезды — БУК танцует и поёт похвалу!</p>
+        </div>
+        <div style="font-size:1.4rem; font-weight:900; color:var(--accent3);">⭐⭐⭐</div>
+      </div>
+    </div>
+    <div class="counter">7 / 15</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ SLIDE 8 — УМНОЕ ПОВТОРЕНИЕ -->
+  <section class="slide" style="background:radial-gradient(ellipse at 50% 100%, rgba(129,140,248,.15) 0%, transparent 60%), var(--surface);">
+    <div style="text-align:center; max-width:860px; width:100%;">
+      <div style="font-size:3rem; margin-bottom:.5rem;">🧠</div>
+      <h2 class="title grad" style="margin-bottom:.75rem;">Алгоритм SM-2 — умное повторение</h2>
+      <p class="lead" style="margin-bottom:1.5rem; font-size:1rem;">
+        Научный метод интервального повторения — слова показываются именно тогда, когда мозг готов их забыть
+      </p>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot" style="background:rgba(56,189,248,.2); color:var(--accent);">🆕</div>
+          <div class="card" style="flex:1; padding:.75rem 1rem;">
+            <h3 class="card-h" style="font-size:.9rem;">Новое слово</h3>
+            <p style="font-size:.82rem; color:var(--subtle);">Слово встречается в нескольких разных играх подряд для первичного запоминания</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:rgba(52,211,153,.2); color:var(--accent3);">📈</div>
+          <div class="card" style="flex:1; padding:.75rem 1rem;">
+            <h3 class="card-h" style="font-size:.9rem; color:var(--accent3);">Оценка уверенности (0–100)</h3>
+            <p style="font-size:.82rem; color:var(--subtle);">Каждый ответ повышает или снижает балл. Правильно без подсказки → +12–20. Ошибка → −20</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:rgba(251,146,60,.2); color:var(--orange);">⏰</div>
+          <div class="card" style="flex:1; padding:.75rem 1rem;">
+            <h3 class="card-h" style="font-size:.9rem; color:var(--orange);">Автоматический интервал</h3>
+            <p style="font-size:.82rem; color:var(--subtle);">Хорошо знаешь слово → оно не повторяется неделю. Забыл → появится уже через день</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:rgba(129,140,248,.2); color:var(--accent2);">⭐</div>
+          <div class="card" style="flex:1; padding:.75rem 1rem;">
+            <h3 class="card-h" style="font-size:.9rem; color:var(--accent2);">Освоено навсегда</h3>
+            <p style="font-size:.82rem; color:var(--subtle);">Балл ≥ 90 → слово считается освоенным и отмечается звёздочкой</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="counter">8 / 15</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ SLIDE 9 — СЛОВАРНЫЙ ЗАПАС -->
+  <section class="slide" style="background:var(--surface);">
+    <h2 class="title" style="text-align:left; width:100%; max-width:860px; margin-bottom:1.5rem;">
+      📖 Словарный <span class="accent">запас</span>
+    </h2>
+    <div style="display:flex; gap:2rem; width:100%; max-width:860px; align-items:flex-start;">
+      <div style="flex:1;">
+        <div class="cards-col" style="gap:.6rem;">
+          <div class="card" style="padding:.75rem 1rem; border-color:rgba(52,211,153,.35);">
+            <div class="card-row"><div class="card-icon" style="font-size:1.4rem;">🌲</div><div><p style="font-size:.8rem;color:var(--subtle);">1–2 класс · <strong style="color:var(--text);">60 слов</strong></p></div></div>
+          </div>
+          <div class="card" style="padding:.75rem 1rem; border-color:rgba(251,146,60,.35);">
+            <div class="card-row"><div class="card-icon" style="font-size:1.4rem;">🏡</div><div><p style="font-size:.8rem;color:var(--subtle);">3–4 класс · <strong style="color:var(--text);">112 слов</strong></p></div></div>
+          </div>
+          <div class="card" style="padding:.75rem 1rem; border-color:rgba(56,189,248,.35);">
+            <div class="card-row"><div class="card-icon" style="font-size:1.4rem;">⛵</div><div><p style="font-size:.8rem;color:var(--subtle);">5–6 класс · <strong style="color:var(--text);">245 слов</strong></p></div></div>
+          </div>
+          <div class="card" style="padding:.75rem 1rem; border-color:rgba(129,140,248,.35);">
+            <div class="card-row"><div class="card-icon" style="font-size:1.4rem;">⛰️</div><div><p style="font-size:.8rem;color:var(--subtle);">7–9 класс · <strong style="color:var(--text);">199 слов</strong></p></div></div>
+          </div>
+          <div class="card" style="padding:.75rem 1rem; border-color:rgba(52,211,153,.35);">
+            <div class="card-row"><div class="card-icon" style="font-size:1.4rem;">🚀</div><div><p style="font-size:.8rem;color:var(--subtle);">10–11 класс · <strong style="color:var(--text);">165 слов</strong></p></div></div>
+          </div>
+        </div>
+      </div>
+      <div style="flex-shrink:0; display:flex; flex-direction:column; gap:1.5rem; align-items:center;">
+        <div class="big-stat">
+          <div class="num grad">781</div>
+          <div class="lbl">словарных слова</div>
+        </div>
+        <div class="big-stat">
+          <div class="num accent2" style="font-size:3rem;">11</div>
+          <div class="lbl">классов (1–11)</div>
+        </div>
+        <div class="big-stat">
+          <div class="num accent3" style="font-size:3rem;">6</div>
+          <div class="lbl">типов заданий</div>
+        </div>
+      </div>
+    </div>
+    <div class="counter">9 / 15</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ SLIDE 10 — ПРОГРЕСС ЭКРАН (скриншот) -->
+  <section class="slide" style="background:var(--surface);">
+    <div class="split" style="max-width:900px; width:100%;">
+      <div class="left">
+        <div class="label">Аналитика</div>
+        <h2 class="title" style="margin-bottom:1rem;">Раздел <span class="accent">&laquo;Прогресс&raquo;</span></h2>
+        <div class="cards-col" style="gap:.8rem;">
+          <div class="card card-row" style="border-color:rgba(56,189,248,.35);">
+            <div class="card-icon">📊</div>
+            <div>
+              <h3 class="card-h">Общий прогресс</h3>
+              <p style="font-size:.85rem;color:var(--subtle);">Сколько слов изучено из 781 — наглядная полоса и процент</p>
+            </div>
+          </div>
+          <div class="card card-row" style="border-color:rgba(52,211,153,.35);">
+            <div class="card-icon">🗺️</div>
+            <div>
+              <h3 class="card-h">По мирам</h3>
+              <p style="font-size:.85rem;color:var(--subtle);">Прогресс по каждому из 5 миров с цветными полосами</p>
+            </div>
+          </div>
+          <div class="card card-row" style="border-color:rgba(251,146,60,.35);">
+            <div class="card-icon">🔥</div>
+            <div>
+              <h3 class="card-h">Серия дней</h3>
+              <p style="font-size:.85rem;color:var(--subtle);">Визуальный календарь — 7 последних дней. Оранжевый = занимался</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Phone mockup: progress screen -->
+      <div class="right">
+        <div class="phone">
+          <div class="phone-bar"><div class="phone-notch"></div></div>
+          <div class="phone-screen" style="min-height:440px;">
+            <div class="app-header">
+              <div class="app-title-sm">Прогресс, Витя</div>
+              <div class="app-subtitle-sm">Твои достижения</div>
+            </div>
+            <div class="stat-grid">
+              <div class="stat-card"><div class="stat-emoji">⚡</div><div class="stat-val" style="color:#007AFF;">30</div><div class="stat-lbl">XP</div></div>
+              <div class="stat-card"><div class="stat-emoji">💎</div><div class="stat-val" style="color:#AF52DE;">0</div><div class="stat-lbl">Кристаллы</div></div>
+              <div class="stat-card"><div class="stat-emoji">🔥</div><div class="stat-val" style="color:#FF9F0A;">1</div><div class="stat-lbl">Серия дней</div></div>
+              <div class="stat-card"><div class="stat-emoji">📚</div><div class="stat-val" style="color:#34C759;">2</div><div class="stat-lbl">В работе</div></div>
+            </div>
+            <div class="prog-bar-container">
+              <div style="font-size:9px;font-weight:700;color:#1D1D1F;margin-bottom:4px;">Общий прогресс</div>
+              <div class="prog-t"><div class="prog-f" style="width:1%;background:#007AFF;"></div></div>
+              <div style="font-size:8px;color:#6E6E73;margin-top:3px;">В работе: 2 из 781 слов (0%)</div>
+            </div>
+            <div class="prog-bar-container" style="padding:6px;">
+              <div style="font-size:9px;font-weight:700;color:#1D1D1F;margin-bottom:6px;">По мирам</div>
+              <div class="prog-row"><span class="prog-lbl">🌲 Волшебный лес</span><span class="prog-val">0/60</span></div>
+              <div class="prog-t"><div class="prog-f" style="width:0%;background:linear-gradient(90deg,#4ade80,#22c55e);"></div></div>
+              <div style="margin-top:4px;"></div>
+              <div class="prog-row"><span class="prog-lbl">🏡 Деревня мастеров</span><span class="prog-val">2/112</span></div>
+              <div class="prog-t"><div class="prog-f" style="width:8%;background:linear-gradient(90deg,#fb923c,#f97316);"></div></div>
+              <div style="margin-top:4px;"></div>
+              <div class="prog-row"><span class="prog-lbl">⛵ Морской порт</span><span class="prog-val">0/245</span></div>
+              <div class="prog-t"><div class="prog-f" style="width:0%;background:linear-gradient(90deg,#38bdf8,#0284c7);"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="counter">10 / 15</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ SLIDE 11 — УНИКАЛЬНЫЕ ОСОБЕННОСТИ -->
+  <section class="slide" style="background:radial-gradient(ellipse at 30% 30%, rgba(56,189,248,.1) 0%, transparent 50%), var(--surface);">
+    <h2 class="title" style="text-align:left; width:100%; max-width:860px; margin-bottom:1.5rem;">
+      ✨ Уникальные <span class="grad">особенности</span>
+    </h2>
+    <div class="cards-grid g2" style="max-width:860px;">
+      <div class="card" style="border-color:rgba(56,189,248,.35);">
+        <div style="font-size:2rem; margin-bottom:.5rem;">🎮</div>
+        <h3 class="card-h">Только обучение-игра</h3>
+        <p style="font-size:.85rem;color:var(--subtle);">Каждое упражнение — это игра, а не тест. Ребёнок хочет переиграть и улучшить результат</p>
+      </div>
+      <div class="card" style="border-color:rgba(52,211,153,.35);">
+        <div style="font-size:2rem; margin-bottom:.5rem;">📵</div>
+        <h3 class="card-h">Без регистрации</h3>
+        <p style="font-size:.85rem;color:var(--subtle);">Открыл — играешь. Весь прогресс хранится прямо в браузере. Никаких аккаунтов и паролей</p>
+      </div>
+      <div class="card" style="border-color:rgba(251,146,60,.35);">
+        <div style="font-size:2rem; margin-bottom:.5rem;">📲</div>
+        <h3 class="card-h">PWA — как приложение</h3>
+        <p style="font-size:.85rem;color:var(--subtle);">Можно добавить на экран телефона и открывать как обычное приложение — без магазина</p>
+      </div>
+      <div class="card" style="border-color:rgba(129,140,248,.35);">
+        <div style="font-size:2rem; margin-bottom:.5rem;">🧠</div>
+        <h3 class="card-h">Учит, а не натаскивает</h3>
+        <p style="font-size:.85rem;color:var(--subtle);">Алгоритм SM-2 — тот же метод, что используют Anki и Duolingo. Долгосрочная память, не зубрёжка</p>
+      </div>
+      <div class="card" style="border-color:rgba(56,189,248,.35);">
+        <div style="font-size:2rem; margin-bottom:.5rem;">🆓</div>
+        <h3 class="card-h">Полностью бесплатно</h3>
+        <p style="font-size:.85rem;color:var(--subtle);">Открытый исходный код, хостинг на GitHub Pages. Никаких подписок, рекламы и платных функций</p>
+      </div>
+      <div class="card" style="border-color:rgba(52,211,153,.35);">
+        <div style="font-size:2rem; margin-bottom:.5rem;">🌙</div>
+        <h3 class="card-h">Тёмная и светлая тема</h3>
+        <p style="font-size:.85rem;color:var(--subtle);">Автоматически подстраивается под системные настройки — комфортно в любое время суток</p>
+      </div>
+    </div>
+    <div class="counter">11 / 15</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ SLIDE 12 — ТЕХНОЛОГИИ -->
+  <section class="slide" style="background:var(--surface);">
+    <h2 class="title" style="text-align:left; width:100%; max-width:860px; margin-bottom:1.5rem;">
+      ⚙️ Технологии <span class="accent2">разработки</span>
+    </h2>
+    <div class="cards-col" style="max-width:860px; gap:.75rem;">
+      <div class="card card-row">
+        <div class="card-icon">⚛️</div>
+        <div style="flex:1;">
+          <h3 class="card-h">React 18 + TypeScript</h3>
+          <p style="font-size:.85rem;color:var(--subtle);">Компонентная архитектура, строгая типизация кода</p>
+        </div>
+        <div class="badge" style="font-size:.75rem;">Frontend</div>
+      </div>
+      <div class="card card-row">
+        <div class="card-icon">⚡</div>
+        <div style="flex:1;">
+          <h3 class="card-h">Vite 7 + Tailwind CSS v4</h3>
+          <p style="font-size:.85rem;color:var(--subtle);">Мгновенная сборка, современные стили iOS-дизайна</p>
+        </div>
+        <div class="badge" style="font-size:.75rem;">Tooling</div>
+      </div>
+      <div class="card card-row">
+        <div class="card-icon">🐻</div>
+        <div style="flex:1;">
+          <h3 class="card-h">Zustand + persist</h3>
+          <p style="font-size:.85rem;color:var(--subtle);">Весь прогресс хранится в localStorage браузера — без сервера</p>
+        </div>
+        <div class="badge purple" style="font-size:.75rem;">State</div>
+      </div>
+      <div class="card card-row">
+        <div class="card-icon">🎬</div>
+        <div style="flex:1;">
+          <h3 class="card-h">Framer Motion</h3>
+          <p style="font-size:.85rem;color:var(--subtle);">Плавные iOS-анимации, перетаскиваемый маскот</p>
+        </div>
+        <div class="badge green" style="font-size:.75rem;">Animation</div>
+      </div>
+      <div class="card card-row">
+        <div class="card-icon">🔊</div>
+        <div style="flex:1;">
+          <h3 class="card-h">Web Audio API + Web Speech API</h3>
+          <p style="font-size:.85rem;color:var(--subtle);">Звуковые эффекты и синтез речи — произношение слов на русском</p>
+        </div>
+        <div class="badge orange" style="font-size:.75rem;">Audio</div>
+      </div>
+      <div class="card card-row">
+        <div class="card-icon">🚀</div>
+        <div style="flex:1;">
+          <h3 class="card-h">GitHub Actions → GitHub Pages</h3>
+          <p style="font-size:.85rem;color:var(--subtle);">CI/CD — каждый пуш автоматически обновляет сайт. Бесплатный хостинг</p>
+        </div>
+        <div class="badge" style="font-size:.75rem;">DevOps</div>
+      </div>
+    </div>
+    <div class="counter">12 / 15</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ SLIDE 13 — БЫСТРЫЙ СТАРТ (QuickStart) -->
+  <section class="slide" style="background:radial-gradient(ellipse at 50% 0%, rgba(56,189,248,.15) 0%, transparent 55%), var(--surface);">
+    <div class="split" style="max-width:900px; width:100%;">
+      <div class="left">
+        <div class="label">Раздел «Учиться»</div>
+        <h2 class="title" style="margin-bottom:1rem;">Быстрый <span class="accent">старт</span></h2>
+        <p style="color:var(--subtle); font-size:.95rem; line-height:1.6; margin-bottom:1.25rem;">
+          Специальный экран быстрого запуска тренировки. Одно нажатие — и сразу в игру для текущего класса.
+        </p>
+        <div class="cards-col" style="gap:.65rem;">
+          <div class="card card-row" style="padding:.7rem 1rem; border-color:rgba(56,189,248,.35);">
+            <div class="card-icon" style="font-size:1.4rem;">▶️</div>
+            <div><h3 class="card-h" style="font-size:.9rem;">Одна кнопка — сразу в игру</h3><p style="font-size:.8rem;color:var(--subtle);">Без лишних экранов для текущего класса</p></div>
+          </div>
+          <div class="card card-row" style="padding:.7rem 1rem; border-color:rgba(251,146,60,.35);">
+            <div class="card-icon" style="font-size:1.4rem;">⚠️</div>
+            <div><h3 class="card-h" style="font-size:.9rem;">Слова для повторения</h3><p style="font-size:.8rem;color:var(--subtle);">Плохо запомненные слова — красным / оранжевым</p></div>
+          </div>
+          <div class="card card-row" style="padding:.7rem 1rem; border-color:rgba(52,211,153,.35);">
+            <div class="card-icon" style="font-size:1.4rem;">🔢</div>
+            <div><h3 class="card-h" style="font-size:.9rem;">Смена класса в 1 касание</h3><p style="font-size:.8rem;color:var(--subtle);">Кнопки 1–11 всегда под рукой</p></div>
+          </div>
+        </div>
+      </div>
+      <!-- Phone mockup: QuickStart -->
+      <div class="right">
+        <div class="phone">
+          <div class="phone-bar"><div class="phone-notch"></div></div>
+          <div class="phone-screen" style="min-height:440px;">
+            <div class="app-header">
+              <div class="app-title-sm">Учиться, Витя</div>
+              <div class="app-subtitle-sm">Быстрый старт тренировки</div>
+            </div>
+            <div style="background:#fff;border-radius:12px;padding:10px;margin:6px 0;">
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                <div><div style="font-size:7px;color:#6E6E73;font-weight:700;">ТЕКУЩИЙ КЛАСС</div><div style="font-size:16px;font-weight:900;color:#1D1D1F;">4 класс</div></div>
+                <div style="text-align:right;"><div style="font-size:7px;color:#6E6E73;font-weight:700;">СЛОВ В СЕССИИ</div><div style="font-size:16px;font-weight:900;color:#007AFF;">7</div></div>
+              </div>
+              <div class="prog-t" style="margin-bottom:3px;"><div class="prog-f" style="width:8%;background:#007AFF;"></div></div>
+              <div style="font-size:7px;color:#6E6E73;margin-bottom:8px;">В работе: 2 / 112</div>
+              <div style="background:#007AFF;border-radius:10px;padding:8px;text-align:center;">
+                <span style="font-size:10px;font-weight:800;color:#fff;">▶ Начать тренировку</span>
+              </div>
+            </div>
+            <!-- class picker -->
+            <div style="background:#fff;border-radius:10px;padding:8px;margin:4px 0;">
+              <div style="font-size:7px;color:#6E6E73;font-weight:700;margin-bottom:5px;">ВЫБРАТЬ КЛАСС</div>
+              <div style="display:flex;flex-wrap:wrap;gap:3px;">
+                <span style="padding:3px 6px;border-radius:6px;background:#e5e5ea;font-size:8px;font-weight:700;color:#1D1D1F;">1</span>
+                <span style="padding:3px 6px;border-radius:6px;background:#e5e5ea;font-size:8px;font-weight:700;color:#1D1D1F;">2</span>
+                <span style="padding:3px 6px;border-radius:6px;background:#e5e5ea;font-size:8px;font-weight:700;color:#1D1D1F;">3</span>
+                <span style="padding:3px 6px;border-radius:6px;background:#007AFF;font-size:8px;font-weight:700;color:#fff;">4</span>
+                <span style="padding:3px 6px;border-radius:6px;background:#e5e5ea;font-size:8px;font-weight:700;color:#1D1D1F;">5</span>
+                <span style="padding:3px 6px;border-radius:6px;background:#e5e5ea;font-size:8px;font-weight:700;color:#1D1D1F;">6</span>
+                <span style="padding:3px 6px;border-radius:6px;background:#e5e5ea;font-size:8px;font-weight:700;color:#1D1D1F;">7</span>
+                <span style="padding:3px 6px;border-radius:6px;background:#e5e5ea;font-size:8px;font-weight:700;color:#1D1D1F;">8</span>
+              </div>
+            </div>
+            <!-- weak words -->
+            <div style="background:#fff;border-radius:10px;padding:8px;margin:4px 0;">
+              <div style="font-size:8px;font-weight:700;color:#1D1D1F;margin-bottom:5px;">⚠️ Требуют повторения</div>
+              <div style="display:flex;flex-wrap:wrap;gap:3px;">
+                <span style="padding:2px 7px;border-radius:10px;background:rgba(255,59,48,.1);color:#FF3B30;font-size:8px;font-weight:700;">коллекция</span>
+                <span style="padding:2px 7px;border-radius:10px;background:rgba(255,149,0,.1);color:#FF9500;font-size:8px;font-weight:700;">аллея</span>
+                <span style="padding:2px 7px;border-radius:10px;background:rgba(255,149,0,.1);color:#FF9500;font-size:8px;font-weight:700;">иллюзия</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="counter">13 / 15</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ SLIDE 14 — БЛАГОДАРНОСТИ -->
+  <section class="slide" style="background:var(--surface);">
+    <h2 class="title" style="text-align:left; width:100%; max-width:860px; margin-bottom:1.5rem;">
+      💙 <span class="accent">Благодарности</span>
+    </h2>
+    <div class="cards-col" style="max-width:860px; gap:.85rem;">
+      <div class="card card-row" style="border-color:rgba(251,146,60,.35);">
+        <div class="card-icon">👨‍👩‍👦</div>
+        <div>
+          <h3 class="card-h" style="color:var(--orange);">Моя семья</h3>
+          <p style="font-size:.9rem;color:var(--subtle);">Папа, Мама, Артём — за поддержку, терпение и вдохновение на каждом шагу</p>
+        </div>
+      </div>
+      <div class="card card-row" style="border-color:rgba(56,189,248,.35);">
+        <div class="card-icon">👨‍💻</div>
+        <div>
+          <h3 class="card-h">Наставник — онлайн школа V-Labs</h3>
+          <p style="font-size:.9rem;color:var(--subtle);">За обучение программированию, помощь в освоении React и TypeScript, советы по архитектуре</p>
+        </div>
+      </div>
+      <div class="card card-row" style="border-color:rgba(52,211,153,.35);">
+        <div class="card-icon">👨‍🏫</div>
+        <div>
+          <h3 class="card-h">Учителя НААШ 186</h3>
+          <p style="font-size:.9rem;color:var(--subtle);">За работу со словарными словами на уроках и вдохновение создать это приложение</p>
+        </div>
+      </div>
+      <div class="card card-row" style="border-color:rgba(129,140,248,.35);">
+        <div class="card-icon">🤝</div>
+        <div>
+          <h3 class="card-h">Одноклассники — первые тестеры</h3>
+          <p style="font-size:.9rem;color:var(--subtle);">За честную обратную связь: «кнопки слишком маленькие», «сова мешает» — всё учтено!</p>
+        </div>
+      </div>
+      <div class="card card-row" style="border-color:rgba(56,189,248,.35);">
+        <div class="card-icon">🌍</div>
+        <div>
+          <h3 class="card-h">Open Source сообщество</h3>
+          <p style="font-size:.9rem;color:var(--subtle);">React, Vite, Framer Motion, Zustand — бесплатные инструменты, без которых проект был бы невозможен</p>
+        </div>
+      </div>
+    </div>
+    <div class="counter">14 / 15</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ SLIDE 15 — СПАСИБО / QR -->
+  <section class="slide" style="background:radial-gradient(ellipse at 50% 50%, rgba(56,189,248,.15) 0%, rgba(129,140,248,.1) 50%, transparent 70%), var(--bg);">
+    <div style="text-align:center; max-width:800px; width:100%;">
+      <div style="font-size:4rem; margin-bottom:1rem;">🎉</div>
+      <h2 class="title grad" style="margin-bottom:.75rem; font-size:clamp(2rem,5vw,3rem);">Спасибо за внимание!</h2>
+      <p class="lead" style="margin-bottom:2rem;">
+        Академия СЛОВО — учись писать без ошибок,<br>увлекательно и весело!
+      </p>
+      <div class="cards-grid g3" style="max-width:720px; margin:0 auto 2rem;">
+        <div class="card center" style="border-color:rgba(56,189,248,.3);">
+          <div style="font-size:1.8rem;">🌐</div>
+          <h3 class="card-h" style="font-size:.85rem;">Сайт</h3>
+          <p style="font-size:.75rem;color:var(--subtle);">artignat2000.github.io/dictionary</p>
+        </div>
+        <div class="card center" style="border-color:rgba(52,211,153,.3);">
+          <div style="font-size:1.8rem;">📱</div>
+          <h3 class="card-h" style="font-size:.85rem; color:var(--accent3);">PWA</h3>
+          <p style="font-size:.75rem;color:var(--subtle);">Добавь на экран телефона</p>
+        </div>
+        <div class="card center" style="border-color:rgba(129,140,248,.3);">
+          <div style="font-size:1.8rem;">💻</div>
+          <h3 class="card-h" style="font-size:.85rem; color:var(--accent2);">GitHub</h3>
+          <p style="font-size:.75rem;color:var(--subtle);">Открытый исходный код</p>
+        </div>
+      </div>
+      <!-- Big QR-code placeholder -->
+      <div style="display:inline-flex; flex-direction:column; align-items:center; gap:.5rem;">
+        <div style="padding:12px; border:3px solid var(--accent); border-radius:16px; box-shadow:0 0 0 3px transparent, 0 0 0 6px rgba(56,189,248,.3);">
+          <div style="width:100px; height:100px; background:var(--card); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:2.5rem;">📱</div>
+        </div>
+        <p style="font-size:.8rem; color:var(--muted); font-weight:600;">artignat2000.github.io/dictionary</p>
+      </div>
+      <div style="margin-top:1.5rem;">
+        <p style="color:var(--muted); font-size:.85rem; font-weight:600;">Виктор Игнатьев · НААШ 186 · 2026</p>
+      </div>
+    </div>
+    <div class="counter">15 / 15</div>
+  </section>
+
+</div><!-- /slides -->
+
+<!-- Navigation -->
+<div id="nav">
+  <button class="nav-btn" id="prevBtn" onclick="prevSlide()" disabled>← Назад</button>
+  <span id="slide-info">1 / 15</span>
+  <button class="nav-btn" id="nextBtn" onclick="nextSlide()">Вперёд →</button>
+</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total  = slides.length;
+  let cur = 0;
+
+  function go(n) {
+    slides[cur].classList.remove('active');
+    slides[cur].classList.add('prev');
+    setTimeout(() => slides[n > cur ? cur : cur].classList.remove('prev'), 400);
+    cur = n;
+    slides[cur].classList.add('active');
+    document.getElementById('slide-info').textContent = (cur+1) + ' / ' + total;
+    document.getElementById('prevBtn').disabled = cur === 0;
+    document.getElementById('nextBtn').disabled = cur === total-1;
+    localStorage.setItem('slovo-prez', cur);
+  }
+
+  function nextSlide() { if (cur < total-1) go(cur+1); }
+  function prevSlide() { if (cur > 0)       go(cur-1); }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') nextSlide();
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')                    prevSlide();
+  });
+
+  // Touch/swipe
+  let tx = 0;
+  document.getElementById('slides').addEventListener('touchstart', e => tx = e.touches[0].clientX, {passive:true});
+  document.getElementById('slides').addEventListener('touchend', e => {
+    const dx = tx - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 50) dx > 0 ? nextSlide() : prevSlide();
+  }, {passive:true});
+
+  // Restore position
+  const saved = parseInt(localStorage.getItem('slovo-prez') || '0');
+  if (saved > 0 && saved < total) go(saved);
+</script>
+</body>
+</html>

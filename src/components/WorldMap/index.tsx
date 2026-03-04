@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { WORLDS, type WorldInfo } from '../../types';
 import { useProgressStore } from '../../store/progressStore';
 import { useSettingsStore } from '../../store/settingsStore';
-import { GlassCard, ProgressBar } from '../UI';
+import { ProgressBar } from '../UI';
 import { isMastered } from '../../lib/spacedRepetition';
 import grade1 from '../../data/words/grade1.json';
 import grade2 from '../../data/words/grade2.json';
@@ -215,52 +215,7 @@ export const WorldMap: React.FC<WorldMapProps> = ({ onStartSession }) => {
         })}
       </div>
 
-      {/* Quick start */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-        className="mt-6"
-      >
-        <GlassCard className="p-5">
-          <h3 className="text-headline mb-3">Быстрый переход к классу</h3>
-          <div className="flex gap-2 flex-wrap mb-4">
-            {Array.from({ length: 11 }, (_, i) => i + 1).map(g => (
-              <motion.button
-                key={g}
-                whileTap={{ scale: 0.88 }}
-                onClick={() => handleWorldSelect(g)}
-                style={{
-                  padding: '6px 14px',
-                  borderRadius: 20,
-                  border: activeGrade === g ? '2px solid var(--ios-blue)' : '1.5px solid var(--glass-border)',
-                  background: activeGrade === g ? 'var(--ios-blue)' : 'var(--glass-bg)',
-                  color: activeGrade === g ? '#fff' : 'var(--text-primary)',
-                  fontSize: 14,
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s',
-                }}
-              >
-                {g} кл.
-              </motion.button>
-            ))}
-          </div>
-          <div className="flex items-center justify-between gap-4 flex-wrap">
-            <p className="text-caption">Следующая тренировка: <strong>{activeGrade} класс</strong></p>
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              whileHover={{ scale: 1.03 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-              onClick={() => onStartSession(activeGrade)}
-              className="btn-primary px-6 py-3 text-base font-semibold"
-              style={{ borderRadius: 'var(--radius-btn)', whiteSpace: 'nowrap' }}
-            >
-              ▶ Начать
-            </motion.button>
-          </div>
-        </GlassCard>
-      </motion.div>
+
     </div>
   );
 };

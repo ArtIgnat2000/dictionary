@@ -169,6 +169,29 @@ export const Dictation: React.FC<DictationProps> = ({ word, onResult }) => {
 
 // ─── WordBuilder ──────────────────────────────────────────────────────────────
 
+const HINT_EMOJI: Record<string, string> = {
+  'птица': '🐦', 'животное': '🐾', 'еда': '🍽️', 'овощ': '🥕', 'фрукт': '🍎',
+  'сладкое': '🍬', 'школа': '🎒', 'природа': '🌿', 'растение': '🌱', 'дерево': '🌳',
+  'цветок': '🌸', 'насекомое': '🐛', 'рыба': '🐟', 'транспорт': '🚗', 'машина': '🚗',
+  'город': '🏙️', 'дом': '🏠', 'мебель': '🪑', 'одежда': '👕', 'обувь': '👟',
+  'посуда': '🍳', 'инструмент': '🔧', 'спорт': '⚽', 'музыка': '🎵', 'книга': '📚',
+  'профессия': '👷', 'человек': '🧑', 'семья': '👨‍👩‍👧', 'тело': '🫀', 'погода': '🌤️',
+  'время': '🕐', 'цвет': '🎨', 'число': '🔢', 'космос': '🚀', 'море': '🌊',
+  'лес': '🌲', 'гора': '⛰️', 'река': '🏞️', 'деревня': '🌾', 'праздник': '🎉',
+  'игра': '🎮', 'искусство': '🖼️', 'наука': '🔬', 'техника': '💻', 'медицина': '🏥',
+  'магазин': '🛍️', 'путешествие': '✈️', 'история': '📜', 'еда и напитки': '🥤',
+  'напиток': '🥤', 'ягода': '🍓', 'гриб': '🍄', 'зерно': '🌾', 'молочное': '🥛',
+  'мясо': '🥩', 'хлеб': '🍞',
+};
+
+function getHintEmoji(hint: string): string {
+  const lower = hint.toLowerCase();
+  for (const [key, emoji] of Object.entries(HINT_EMOJI)) {
+    if (lower.includes(key)) return emoji;
+  }
+  return '💡';
+}
+
 interface WordBuilderProps { word: Word; onResult: (correct: boolean, usedHint?: boolean) => void; }
 
 export const WordBuilder: React.FC<WordBuilderProps> = ({ word, onResult }) => {
@@ -258,14 +281,16 @@ export const WordBuilder: React.FC<WordBuilderProps> = ({ word, onResult }) => {
 
   return (
     <div className="flex flex-col gap-6 items-center w-full max-w-md mx-auto">
-      <div className="glass-card p-4 w-full text-center">
-        <p className="text-body" style={{ color: 'var(--text-secondary)', fontSize: 14 }}>{word.hint}</p>
+      {/* Picture hint — always visible */}
+      <div className="glass-card p-4 w-full text-center" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+        <span style={{ fontSize: 64, lineHeight: 1 }}>{getHintEmoji(word.hint)}</span>
+        <p className="text-body" style={{ color: 'var(--text-secondary)', fontSize: 14, marginTop: 4 }}>{word.hint}</p>
         <p className="text-headline mt-1">{word.sentence.replace('____', '?')}</p>
       </div>
 
       <p className="text-caption">Собери слово из букв</p>
 
-      {/* Hint button */}
+      {/* Letter hint button */}
       {state === 'idle' && placed.some(p => p === null) && (
         <motion.button
           whileTap={{ scale: 0.9 }}
@@ -278,7 +303,7 @@ export const WordBuilder: React.FC<WordBuilderProps> = ({ word, onResult }) => {
             fontSize: 13, fontWeight: 600,
           }}
         >
-          💡 Подсказка{hintCount > 0 ? ` (${hintCount})` : ''}
+          🔤 Подставить букву{hintCount > 0 ? ` (${hintCount})` : ''}
           {!usedHint && <span style={{ fontSize: 11, opacity: 0.7, marginLeft: 4 }}>-10 XP</span>}
         </motion.button>
       )}
