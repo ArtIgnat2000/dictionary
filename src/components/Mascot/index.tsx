@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { createContext, useContext, useState, useCallback, useRef } from 'react';
+import { motion, AnimatePresence, useDragControls } from 'framer-motion';
 import type { TargetAndTransition } from 'framer-motion';
 import type { MascotMood } from '../../types';
 
@@ -99,28 +99,90 @@ const moodAnimations: Record<MascotMood, TargetAndTransition> = {
 
 export const Mascot: React.FC = () => {
   const { mood, message } = useMascot();
+  const [minimized, setMinimized] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const constraintsRef = useRef<HTMLDivElement>(null);
+  const dragControls = useDragControls();
+
+  const handleTap = () => {
+    if (!isDragging) setMinimized(v => !v);
+  };
 
   return (
-    <div className="fixed bottom-20 right-4 md:bottom-8 md:right-8 z-50 flex flex-col items-end gap-2 pointer-events-none">
-      <AnimatePresence>
-        {message && (
-          <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.9 }}
-            className="glass-card px-3 py-2 text-sm font-medium max-w-[160px] text-right"
-            style={{ borderRadius: 14 }}
-          >
-            {message}
-          </motion.div>
-        )}
-      </AnimatePresence>
+    <>
+      {/* Invisible full-screen constraint box */}
+      <div
+        ref={constraintsRef}
+        style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 49 }}
+      />
+
       <motion.div
-        animate={moodAnimations[mood]}
-        style={{ width: 80, height: 96, cursor: 'default' }}
+        drag
+        dragControls={dragControls}
+        dragMomentum={false}
+        dragConstraints={constraintsRef}
+        dragElastic={0.08}
+        onDragStart={() => setIsDragging(true)}
+        onDragEnd={() => setTimeout(() => setIsDragging(false), 50)}
+        className="fixed z-50"
+        style={{ bottom: 80, right: 16, touchAction: 'none', cursor: 'grab' }}
+        whileDrag={{ cursor: 'grabbing', scale: 1.05 }}
       >
-        <BukBody mood={mood} />
+        <div className="flex flex-col items-end gap-2">
+          {/* Speech bubble */}
+          <AnimatePresence>
+            {message && !minimized && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                className="glass-card px-3 py-2 text-sm font-medium max-w-[160px] text-right"
+                style={{ borderRadius: 14, pointerEvents: 'none' }}
+              >
+                {message}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Owl or minimized pill */}
+          <AnimatePresence mode="wait">
+            {minimized ? (
+              <motion.div
+                key="mini"
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.5, opacity: 0 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                onClick={handleTap}
+                style={{
+                  width: 48, height: 48,
+                  borderRadius: '50%',
+                  background: 'rgba(244,165,26,0.92)',
+                  backdropFilter: 'blur(10px)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 26,
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.18)',
+                  cursor: 'pointer',
+                }}
+              >
+                🦉
+              </motion.div>
+            ) : (
+              <motion.div
+                key="full"
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ ...moodAnimations[mood], scale: 1, opacity: 1 }}
+                exit={{ scale: 0.5, opacity: 0 }}
+                onClick={handleTap}
+                style={{ width: 80, height: 96, cursor: 'pointer' }}
+                title="Нажми, чтобы спрятать / перетащить"
+              >
+                <BukBody mood={mood} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </motion.div>
-    </div>
+    </>
   );
 };

@@ -59,9 +59,9 @@ export const ProgressScreen: React.FC = () => {
             transition={{ delay: i * 0.08 }}
           >
             <GlassCard className="p-4 text-center">
-              <div style={{ fontSize: 32 }}>{s.emoji}</div>
+              <div style={{ fontSize: 36 }}>{s.emoji}</div>
               <div className="text-title" style={{ color: s.color }}>{s.value}</div>
-              <div className="text-caption">{s.label}</div>
+              <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>{s.label}</div>
             </GlassCard>
           </motion.div>
         ))}
@@ -71,7 +71,7 @@ export const ProgressScreen: React.FC = () => {
       <GlassCard className="p-5">
         <h3 className="text-headline mb-3">Общий прогресс</h3>
         <ProgressBar value={masteryPct} />
-        <p className="text-caption mt-2">
+        <p style={{ fontSize: 15, fontWeight: 500, color: 'var(--text-secondary)', marginTop: 8 }}>
           В работе: {practicedWords} из {totalVocab} слов ({Math.round(masteryPct)}%){masteredWords > 0 ? ` · Освоено: ${masteredWords}` : ''}
         </p>
       </GlassCard>
@@ -91,9 +91,9 @@ export const ProgressScreen: React.FC = () => {
             const pct = total > 0 ? (practiced / total) * 100 : 0;
             return (
               <div key={world.id}>
-                <div className="flex justify-between text-caption mb-1">
-                  <span>{world.emoji} {world.name}</span>
-                  <span>{practiced}/{total}{mastered > 0 ? ` (⭐${mastered})` : ''}</span>
+                <div className="flex justify-between mb-1" style={{ fontSize: 15, fontWeight: 500 }}>
+                  <span style={{ color: 'var(--text-color)' }}>{world.emoji} {world.name}</span>
+                  <span style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>{practiced}/{total}{mastered > 0 ? ` (⭐${mastered})` : ''}</span>
                 </div>
                 <div className="progress-track">
                   <motion.div
