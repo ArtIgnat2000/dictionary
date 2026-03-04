@@ -18,9 +18,9 @@ interface KeyboardProps {
 }
 
 const RusKeyboard: React.FC<KeyboardProps> = ({ onKey, disabled }) => (
-  <div className="flex flex-col gap-1.5 select-none" style={{ userSelect: 'none' }}>
+  <div className="flex flex-col gap-2 select-none w-full" style={{ userSelect: 'none' }}>
     {KEYBOARD_ROWS.map((row, ri) => (
-      <div key={ri} className="flex justify-center gap-1">
+      <div key={ri} className="flex justify-center gap-1.5 w-full">
         {row.map(k => (
           <motion.button
             key={k}
@@ -28,14 +28,16 @@ const RusKeyboard: React.FC<KeyboardProps> = ({ onKey, disabled }) => (
             transition={{ type: 'spring', stiffness: 500, damping: 25 }}
             onClick={() => !disabled && onKey(k)}
             disabled={disabled}
-            className="flex items-center justify-center rounded-[10px] font-semibold text-base border-none cursor-pointer"
+            className="flex items-center justify-center rounded-[10px] font-semibold border-none cursor-pointer"
             style={{
-              width: k === '⌫' ? 44 : 30,
-              height: 44,
-              background: 'var(--glass-bg-strong)',
+              flex: k === '⌫' ? '1.5' : '1',
+              minWidth: 0,
+              height: 52,
+              background: k === '⌫' ? 'var(--glass-bg)' : 'var(--glass-bg-strong)',
               color: 'var(--text-color)',
-              fontSize: k === '⌫' ? 18 : 16,
-              boxShadow: '0 1px 4px rgba(0,0,0,0.12)',
+              fontSize: k === '⌫' ? 20 : 18,
+              fontWeight: 600,
+              boxShadow: '0 2px 6px rgba(0,0,0,0.13)',
               borderBottom: '2px solid var(--glass-border-subtle)',
               flexShrink: 0,
             }}
