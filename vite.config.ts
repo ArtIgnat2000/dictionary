@@ -8,4 +8,8 @@ export default defineConfig(({ command }) => ({
     tailwindcss(),
   ],
   base: command === 'build' ? '/dictionary/' : '/',
+  define: {
+    __BUILD_NUMBER__: JSON.stringify(process.env.GITHUB_RUN_NUMBER ?? 'dev'),
+    __BUILD_DATE__: JSON.stringify(new Date().toISOString().slice(0, 10)),
+  },
 }))

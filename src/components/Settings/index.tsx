@@ -5,6 +5,7 @@ import { useProgressStore } from '../../store/progressStore';
 import { GlassCard, IosButton } from '../UI';
 import { exportProgress, importProgress } from '../../lib/exportImport';
 import type { Theme } from '../../types';
+import { APP_VERSION, BUILD_DATE } from '../../version';
 
 export const SettingsScreen: React.FC = () => {
   const {
@@ -167,6 +168,25 @@ export const SettingsScreen: React.FC = () => {
         <IosButton variant="danger" onClick={handleReset}>
           Сбросить всё
         </IosButton>
+      </GlassCard>
+
+      {/* Version */}
+      <GlassCard className="p-5">
+        <h3 className="text-headline mb-3">ℹ️ О приложении</h3>
+        <div className="flex flex-col gap-2" style={{ fontSize: 14, color: 'var(--text-secondary)' }}>
+          <div className="flex justify-between">
+            <span>Академия СЛОВО</span>
+            <span style={{ fontWeight: 600, color: 'var(--text-color)' }}>v{APP_VERSION}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Дата сборки</span>
+            <span style={{ fontWeight: 600, color: 'var(--text-color)' }}>{BUILD_DATE}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Словарный запас</span>
+            <span style={{ fontWeight: 600, color: 'var(--text-color)' }}>781 слово · 11 классов</span>
+          </div>
+        </div>
       </GlassCard>
     </div>
   );
