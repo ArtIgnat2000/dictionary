@@ -47,11 +47,13 @@ export const DictionaryScreen: React.FC = () => {
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return sourceList;
-    return sourceList.filter(w =>
-      w.text.toLowerCase().includes(q) ||
-      w.hint.toLowerCase().includes(q)
-    );
+    const list = q
+      ? sourceList.filter(w =>
+          w.text.toLowerCase().includes(q) ||
+          w.hint.toLowerCase().includes(q)
+        )
+      : sourceList;
+    return [...list].sort((a, b) => a.text.localeCompare(b.text, 'ru'));
   }, [sourceList, search]);
 
   const totalCount = activeGrade === 'all'
