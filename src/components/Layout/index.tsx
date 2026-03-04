@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { House, Lightning, ChartBar, Gear } from 'phosphor-react';
+import { House, Lightning, ChartBar, Gear, BookOpen } from 'phosphor-react';
 
-export type NavPage = 'map' | 'study' | 'progress' | 'settings';
+export type NavPage = 'map' | 'study' | 'progress' | 'settings' | 'dictionary';
 
 interface NavItem {
   id: NavPage;
@@ -11,10 +11,11 @@ interface NavItem {
 }
 
 const items: NavItem[] = [
-  { id: 'study',    label: 'Учиться',   icon: <Lightning weight="fill" size={22} /> },
-  { id: 'progress', label: 'Прогресс',  icon: <ChartBar weight="fill" size={22} /> },
-  { id: 'map',      label: 'Карта',     icon: <House weight="fill" size={22} /> },
-  { id: 'settings', label: 'Настройки', icon: <Gear weight="fill" size={22} /> },
+  { id: 'study',      label: 'Учиться',   icon: <Lightning weight="fill" size={22} /> },
+  { id: 'dictionary', label: 'Словарь',   icon: <BookOpen weight="fill" size={22} /> },
+  { id: 'progress',   label: 'Прогресс',  icon: <ChartBar weight="fill" size={22} /> },
+  { id: 'map',        label: 'Карта',     icon: <House weight="fill" size={22} /> },
+  { id: 'settings',   label: 'Настройки', icon: <Gear weight="fill" size={22} /> },
 ];
 
 interface BottomNavProps {

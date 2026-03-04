@@ -6,6 +6,7 @@ import { SessionEngine } from './components/Session';
 import { ProgressScreen } from './components/Progress';
 import { SettingsScreen } from './components/Settings';
 import { QuickStartScreen } from './components/QuickStart';
+import { DictionaryScreen } from './components/Dictionary';
 import { Mascot, MascotProvider } from './components/Mascot';
 import { useTheme } from './hooks/useTheme';
 import { useProgressStore } from './store/progressStore';
@@ -140,6 +141,8 @@ const AppContent: React.FC = () => {
         return <WorldMap onStartSession={handleStartSession} />;
       case 'study':
         return <QuickStartScreen onStartSession={handleStartSession} />;
+      case 'dictionary':
+        return <DictionaryScreen />;
       case 'progress':
         return <ProgressScreen />;
       case 'settings':
