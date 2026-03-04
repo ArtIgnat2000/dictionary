@@ -1,0 +1,86 @@
+:root {
+  /* ── Светлая тема ── */
+  --bg-color: #F5F5F7;
+  --text-color: #1D1D1F;
+  --text-secondary: #6E6E73;
+  --success-color: #34C759;
+  --error-color: #FF3B30;
+  --spacing-unit: 8px;
+
+  /* iOS Blue system colors */
+  --ios-blue: #007AFF;
+  --ios-blue-hover: #0066D6;
+  --ios-purple: #AF52DE;
+  --ios-orange: #FF9F0A;
+  --ios-indigo: #5E5CE6;
+  --ios-teal: #30B0C7;
+  --ios-yellow: #FFD60A;
+
+  /* Glass / Liquid Glass */
+  --glass-bg: rgba(245, 245, 247, 0.75);
+  --glass-bg-strong: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.50);
+  --glass-border-subtle: rgba(0, 0, 0, 0.08);
+  --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-modal: 0 24px 80px rgba(0, 0, 0, 0.16);
+
+  /* Radii */
+  --radius-sm: 10px;
+  --radius-btn: 14px;
+  --radius-card: 20px;
+  --radius-modal: 28px;
+  --radius-pill: 999px;
+
+  /* Typography */
+  --font-sans: 'SF Pro Display', 'SF Pro Text', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-heavy: 800;
+
+  /* World theme gradients */
+  --world-1-from: #52d78a;
+  --world-1-to: #34C759;
+  --world-2-from: #ffb347;
+  --world-2-to: #FF9F0A;
+  --world-3-from: #5bc8f5;
+  --world-3-to: #007AFF;
+  --world-4-from: #c77dff;
+  --world-4-to: #AF52DE;
+  --world-5-from: #4cc9f0;
+  --world-5-to: #5E5CE6;
+
+  /* Nav bar */
+  --nav-bg: rgba(245, 245, 247, 0.82);
+  --nav-border: rgba(0, 0, 0, 0.10);
+}
+
+[data-theme="dark"] {
+  /* ── Тёмная тема ── */
+  --bg-color: #000000;
+  --text-color: #F5F5F7;
+  --text-secondary: #98989F;
+  --success-color: #30D158;
+  --error-color: #FF453A;
+
+  --ios-blue: #0A84FF;
+  --ios-blue-hover: #339AF0;
+  --ios-purple: #BF5AF2;
+  --ios-orange: #FF9F0A;
+  --ios-indigo: #6E6CF0;
+  --ios-teal: #40CBE0;
+  --ios-yellow: #FFD60A;
+
+  --glass-bg: rgba(30, 30, 32, 0.78);
+  --glass-bg-strong: rgba(44, 44, 46, 0.92);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-border-subtle: rgba(255, 255, 255, 0.06);
+  --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.28), 0 1px 4px rgba(0, 0, 0, 0.16);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.36), 0 2px 8px rgba(0, 0, 0, 0.18);
+  --shadow-modal: 0 24px 80px rgba(0, 0, 0, 0.56);
+
+  --nav-bg: rgba(18, 18, 18, 0.85);
+  --nav-border: rgba(255, 255, 255, 0.08);
+}

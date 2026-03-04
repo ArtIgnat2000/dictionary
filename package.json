@@ -1,0 +1,36 @@
+{
+  "name": "slovo-platform",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "preview": "vite preview",
+    "build": "tsc -b && vite build",
+    "dev": "vite",
+    "lint": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@vitejs/plugin-react": "^5.1.4",
+    "framer-motion": "^12.34.5",
+    "howler": "^2.2.4",
+    "idb": "^8.0.3",
+    "phosphor-react": "^1.4.1",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-router-dom": "^7.13.1",
+    "vite": "^7.3.1",
+    "zustand": "^5.0.11"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.2.1",
+    "@types/howler": "^2.2.12",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "tailwindcss": "^4.2.1",
+    "typescript": "^5.9.3"
+  }
+}
