@@ -18,9 +18,9 @@ interface KeyboardProps {
 }
 
 const RusKeyboard: React.FC<KeyboardProps> = ({ onKey, disabled }) => (
-  <div className="flex flex-col gap-2 select-none w-full" style={{ userSelect: 'none' }}>
+  <div className="flex flex-col select-none w-full" style={{ userSelect: 'none', gap: 8, padding: '4px 2px' }}>
     {KEYBOARD_ROWS.map((row, ri) => (
-      <div key={ri} className="flex justify-center gap-1.5 w-full">
+      <div key={ri} className="flex justify-center w-full" style={{ gap: 5 }}>
         {row.map(k => (
           <motion.button
             key={k}
@@ -32,12 +32,12 @@ const RusKeyboard: React.FC<KeyboardProps> = ({ onKey, disabled }) => (
             style={{
               flex: k === '⌫' ? 1.5 : 1,
               minWidth: 0,
-              height: 52,
+              height: 60,
               background: k === '⌫' ? 'var(--glass-bg)' : 'var(--glass-bg-strong)',
               color: 'var(--text-color)',
-              fontSize: k === '⌫' ? 20 : 18,
+              fontSize: k === '⌫' ? 22 : 20,
               fontWeight: 600,
-              boxShadow: '0 2px 6px rgba(0,0,0,0.13)',
+              boxShadow: '0 2px 0 rgba(0,0,0,0.18)',
               borderBottom: '2px solid var(--glass-border-subtle)',
             }}
           >
@@ -106,13 +106,13 @@ export const Dictation: React.FC<DictationProps> = ({ word, onResult }) => {
   const sentenceDisplay = word.sentence.replace('____', ' —       — ');
 
   return (
-    <div className="flex flex-col gap-5 items-center w-full max-w-md mx-auto">
+    <div className="flex flex-col gap-3 items-center w-full max-w-md mx-auto">
       {/* Hint sentence */}
-      <div className="glass-card p-4 w-full text-center">
-        <p className="text-body" style={{ color: 'var(--text-secondary)', fontSize: 14 }}>
+      <div className="glass-card p-3 w-full text-center">
+        <p className="text-body" style={{ color: 'var(--text-secondary)', fontSize: 13 }}>
           {word.hint}
         </p>
-        <p className="text-headline mt-1" style={{ lineHeight: 1.6 }}>
+        <p className="text-headline mt-1" style={{ lineHeight: 1.5 }}>
           {sentenceDisplay}
         </p>
       </div>
@@ -125,9 +125,9 @@ export const Dictation: React.FC<DictationProps> = ({ word, onResult }) => {
       >
         <div
           className="flex items-center justify-center rounded-full"
-          style={{ width: 72, height: 72, background: 'var(--ios-blue)', boxShadow: '0 4px 16px rgba(0,122,255,0.35)' }}
+          style={{ width: 60, height: 60, background: 'var(--ios-blue)', boxShadow: '0 4px 16px rgba(0,122,255,0.35)' }}
         >
-          <span style={{ fontSize: 32 }}>🔊</span>
+          <span style={{ fontSize: 26 }}>🔊</span>
         </div>
         <span className="text-caption">Нажми, чтобы услышать</span>
       </motion.button>
@@ -137,7 +137,7 @@ export const Dictation: React.FC<DictationProps> = ({ word, onResult }) => {
         animate={state === 'error' ? { x: [-8, 8, -6, 6, 0] } : {}}
         transition={{ duration: 0.4 }}
         className={`word-input ${state}`}
-        style={{ minHeight: 60, display: 'flex', alignItems: 'center', justifyContent: 'center', letterSpacing: '0.12em' }}
+        style={{ minHeight: 54, display: 'flex', alignItems: 'center', justifyContent: 'center', letterSpacing: '0.12em' }}
       >
         <span style={{ fontSize: 28, fontWeight: 700, color: state === 'error' ? 'var(--error-color)' : state === 'success' ? 'var(--success-color)' : 'var(--text-color)' }}>
           {revealed ? word.text : (input || <span style={{ opacity: 0.3 }}>—</span>)}
