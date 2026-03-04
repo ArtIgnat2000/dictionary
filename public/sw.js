@@ -1,4 +1,4 @@
-const CACHE_NAME = 'slovo-v1';
+const CACHE_NAME = 'slovo-v__BUILD__'; // replaced by CI with run number
 const STATIC_ASSETS = [
   './',
   './index.html',
