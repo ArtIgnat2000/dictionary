@@ -30,7 +30,7 @@ interface QuickStartProps {
 
 export const QuickStartScreen: React.FC<QuickStartProps> = ({ onStartSession }) => {
   const { masteryMap, xp, streak } = useProgressStore();
-  const { activeGrade, setActiveGrade, childName, wordsPerSession } = useSettingsStore();
+  const { activeGrade, childName, wordsPerSession } = useSettingsStore();
 
   const words = GRADE_DATA[activeGrade] ?? [];
   const total = words.length;
@@ -109,39 +109,6 @@ export const QuickStartScreen: React.FC<QuickStartProps> = ({ onStartSession }) 
           >
             ▶ Начать тренировку
           </motion.button>
-        </GlassCard>
-      </motion.div>
-
-      {/* Быстрая смена класса */}
-      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.14 }}>
-        <GlassCard className="p-4">
-          <div style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 600, marginBottom: 10 }}>
-            ВЫБРАТЬ КЛАСС
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {Array.from({ length: 11 }, (_, i) => i + 1).map(g => (
-              <motion.button
-                key={g}
-                whileTap={{ scale: 0.88 }}
-                onClick={() => setActiveGrade(g)}
-                style={{
-                  minWidth: 44, height: 44,
-                  borderRadius: 12,
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontFamily: 'var(--font-sans)',
-                  fontSize: 15,
-                  fontWeight: 700,
-                  background: activeGrade === g ? 'var(--ios-blue)' : 'var(--glass-bg-strong)',
-                  color: activeGrade === g ? '#fff' : 'var(--text-color)',
-                  boxShadow: activeGrade === g ? '0 2px 10px rgba(0,122,255,0.3)' : 'none',
-                  transition: 'background 0.15s, box-shadow 0.15s',
-                }}
-              >
-                {g}
-              </motion.button>
-            ))}
-          </div>
         </GlassCard>
       </motion.div>
 
