@@ -30,7 +30,7 @@ interface QuickStartProps {
 
 export const QuickStartScreen: React.FC<QuickStartProps> = ({ onStartSession }) => {
   const { masteryMap, xp, streak } = useProgressStore();
-  const { activeGrade, childName, wordsPerSession } = useSettingsStore();
+  const { activeGrade, wordsPerSession } = useSettingsStore();
 
   const words = GRADE_DATA[activeGrade] ?? [];
   const total = words.length;
@@ -57,12 +57,7 @@ export const QuickStartScreen: React.FC<QuickStartProps> = ({ onStartSession }) 
   return (
     <div className="flex flex-col gap-5">
       <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-display mb-1">
-          {childName ? `Учиться, ${childName}` : 'Учиться'}
-        </h1>
-        <p className="text-body" style={{ color: 'var(--text-secondary)' }}>
-          Быстрый старт тренировки
-        </p>
+        <h1 className="text-display mb-1">Быстрый старт тренировки</h1>
       </motion.div>
 
       {/* Текущий класс + кнопка старта */}
