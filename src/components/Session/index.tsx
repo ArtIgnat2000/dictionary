@@ -186,7 +186,7 @@ export const SessionEngine: React.FC<SessionEngineProps> = ({ grade, onComplete 
 
   useEffect(() => { updateStreak(); }, []);
 
-  const handleResult = useCallback((correct: boolean) => {
+  const handleResult = useCallback((correct: boolean, usedHint?: boolean) => {
     const quality = correct ? 5 : 1;
     recordAnswer(currentWord.id, quality);
 
@@ -194,11 +194,12 @@ export const SessionEngine: React.FC<SessionEngineProps> = ({ grade, onComplete 
     setLocalStreak(newStreak);
 
     if (correct) {
-      addXP(15);
-      if (newStreak > 0 && newStreak % 3 === 0) { addCrystals(1); sound.streak(); }
+      const xp = usedHint ? 5 : 15;
+      addXP(xp);
+      if (!usedHint && newStreak > 0 && newStreak % 3 === 0) { addCrystals(1); sound.streak(); }
       setMood(
-        newStreak >= 5 ? 'dance' : newStreak >= 3 ? 'excited' : 'happy',
-        newStreak >= 5 ? '🔥 Великолепно!' : newStreak >= 3 ? '🎯 Серия!' : '✓ Правильно!',
+        newStreak >= 5 && !usedHint ? 'dance' : newStreak >= 3 && !usedHint ? 'excited' : 'happy',
+        usedHint ? `✓ С подсказкой (+${xp} XP)` : newStreak >= 5 ? '🔥 Великолепно!' : newStreak >= 3 ? '🎯 Серия!' : '✓ Правильно!',
         1500
       );
     } else {

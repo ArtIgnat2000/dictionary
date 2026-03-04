@@ -50,7 +50,7 @@ const RusKeyboard: React.FC<KeyboardProps> = ({ onKey, disabled }) => (
 
 // ─── Dictation ────────────────────────────────────────────────────────────────
 
-interface DictationProps { word: Word; onResult: (correct: boolean) => void; }
+interface DictationProps { word: Word; onResult: (correct: boolean, usedHint?: boolean) => void; }
 
 export const Dictation: React.FC<DictationProps> = ({ word, onResult }) => {
   const sound = useSound();
@@ -167,7 +167,7 @@ export const Dictation: React.FC<DictationProps> = ({ word, onResult }) => {
 
 // ─── WordBuilder ──────────────────────────────────────────────────────────────
 
-interface WordBuilderProps { word: Word; onResult: (correct: boolean) => void; }
+interface WordBuilderProps { word: Word; onResult: (correct: boolean, usedHint?: boolean) => void; }
 
 export const WordBuilder: React.FC<WordBuilderProps> = ({ word, onResult }) => {
   const sound = useSound();
@@ -175,6 +175,8 @@ export const WordBuilder: React.FC<WordBuilderProps> = ({ word, onResult }) => {
   const [placed, setPlaced] = useState<(string | null)[]>(Array(word.text.length).fill(null));
   const [available, setAvailable] = useState<{ letter: string; used: boolean }[]>([]);
   const [state, setState] = useState<'idle' | 'success' | 'error'>('idle');
+  const [usedHint, setUsedHint] = useState(false);
+  const [hintCount, setHintCount] = useState(0);
 
   useEffect(() => {
     const letters = word.text.split('');
@@ -185,7 +187,33 @@ export const WordBuilder: React.FC<WordBuilderProps> = ({ word, onResult }) => {
     setAvailable(pool.map(letter => ({ letter, used: false })));
     setPlaced(Array(word.text.length).fill(null));
     setState('idle');
+    setUsedHint(false);
+    setHintCount(0);
   }, [word.id]);
+
+  // Reveal the next correct letter as a hint
+  const handleHint = () => {
+    if (state !== 'idle') return;
+    const nextSlot = placed.findIndex(p => p === null);
+    if (nextSlot === -1) return;
+    const correctLetter = word.text[nextSlot];
+    // Find this letter in available pool
+    const aIdx = available.findIndex(a => !a.used && a.letter === correctLetter);
+    if (aIdx === -1) return;
+    const newPlaced = [...placed];
+    newPlaced[nextSlot] = correctLetter;
+    const newAvail = [...available];
+    newAvail[aIdx] = { ...newAvail[aIdx], used: true };
+    setPlaced(newPlaced);
+    setAvailable(newAvail);
+    setUsedHint(true);
+    setHintCount(c => c + 1);
+    if (!newPlaced.includes(null)) {
+      setState('success');
+      sound.correct();
+      setTimeout(() => onResult(true, true), 800);
+    }
+  };
 
   const handleLetterClick = (idx: number) => {
     if (available[idx].used || state !== 'idle') return;
@@ -201,7 +229,7 @@ export const WordBuilder: React.FC<WordBuilderProps> = ({ word, onResult }) => {
     if (!newPlaced.includes(null)) {
       const result = newPlaced.join('') === word.text;
       setState(result ? 'success' : 'error');
-      if (result) { sound.correct(); setTimeout(() => onResult(true), 800); }
+      if (result) { sound.correct(); setTimeout(() => onResult(true, usedHint), 800); }
       else {
         sound.wrong();
         setTimeout(() => {
@@ -234,6 +262,24 @@ export const WordBuilder: React.FC<WordBuilderProps> = ({ word, onResult }) => {
       </div>
 
       <p className="text-caption">Собери слово из букв</p>
+
+      {/* Hint button */}
+      {state === 'idle' && placed.some(p => p === null) && (
+        <motion.button
+          whileTap={{ scale: 0.9 }}
+          onClick={handleHint}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 6,
+            padding: '6px 16px', borderRadius: 20, border: 'none', cursor: 'pointer',
+            background: usedHint ? 'rgba(255,149,0,0.12)' : 'rgba(0,122,255,0.10)',
+            color: usedHint ? 'var(--ios-orange)' : 'var(--ios-blue)',
+            fontSize: 13, fontWeight: 600,
+          }}
+        >
+          💡 Подсказка{hintCount > 0 ? ` (${hintCount})` : ''}
+          {!usedHint && <span style={{ fontSize: 11, opacity: 0.7, marginLeft: 4 }}>-10 XP</span>}
+        </motion.button>
+      )}
 
       {/* Slots */}
       <div className="flex gap-2 flex-wrap justify-center">
@@ -279,7 +325,7 @@ export const WordBuilder: React.FC<WordBuilderProps> = ({ word, onResult }) => {
 
       {state === 'success' && (
         <motion.p initial={{ scale: 0 }} animate={{ scale: 1 }} className="text-xl font-bold" style={{ color: 'var(--success-color)' }}>
-          ✓ Правильно!
+          {usedHint ? '✓ Верно! (+5 XP)' : '✓ Правильно! (+15 XP)'}
         </motion.p>
       )}
     </div>
@@ -288,7 +334,7 @@ export const WordBuilder: React.FC<WordBuilderProps> = ({ word, onResult }) => {
 
 // ─── FillBlank ────────────────────────────────────────────────────────────────
 
-interface FillBlankProps { word: Word; onResult: (correct: boolean) => void; }
+interface FillBlankProps { word: Word; onResult: (correct: boolean, usedHint?: boolean) => void; }
 
 export const FillBlank: React.FC<FillBlankProps> = ({ word, onResult }) => {
   const sound = useSound();
@@ -349,7 +395,7 @@ export const FillBlank: React.FC<FillBlankProps> = ({ word, onResult }) => {
 
 // ─── FixRobot ─────────────────────────────────────────────────────────────────
 
-interface FixRobotProps { word: Word; onResult: (correct: boolean) => void; }
+interface FixRobotProps { word: Word; onResult: (correct: boolean, usedHint?: boolean) => void; }
 
 export const FixRobot: React.FC<FixRobotProps> = ({ word, onResult }) => {
   const sound = useSound();
@@ -417,7 +463,7 @@ export const FixRobot: React.FC<FixRobotProps> = ({ word, onResult }) => {
 
 // ─── SpeedTrain ───────────────────────────────────────────────────────────────
 
-interface SpeedTrainProps { word: Word; onResult: (correct: boolean) => void; timeLimit?: number; }
+interface SpeedTrainProps { word: Word; onResult: (correct: boolean, usedHint?: boolean) => void; timeLimit?: number; }
 
 export const SpeedTrain: React.FC<SpeedTrainProps> = ({ word, onResult, timeLimit = 12 }) => {
   const sound = useSound();
@@ -499,7 +545,7 @@ export const SpeedTrain: React.FC<SpeedTrainProps> = ({ word, onResult, timeLimi
 // ─── PhraseArrange ─────────────────────────────────────────────────────────────
 // Для устойчивых выражений: перемешанные карточки-слова — нажимай в правильном порядке
 
-interface PhraseArrangeProps { word: Word; onResult: (correct: boolean) => void; }
+interface PhraseArrangeProps { word: Word; onResult: (correct: boolean, usedHint?: boolean) => void; }
 
 type Tile = { word: string; origIdx: number; tileId: number };
 
