@@ -101,7 +101,7 @@ const AppContent: React.FC = () => {
   const { xp, streak } = useProgressStore();
   const { childName } = useSettingsStore();
 
-  const [page, setPage] = useState<NavPage>('map');
+  const [page, setPage] = useState<NavPage>('study');
   const [sessionGrade, setSessionGrade] = useState<number | null>(null);
   const [onboarded, setOnboarded] = useState(() => {
     try {

@@ -11,9 +11,9 @@ interface NavItem {
 }
 
 const items: NavItem[] = [
-  { id: 'map',      label: 'Карта',     icon: <House weight="fill" size={22} /> },
   { id: 'study',    label: 'Учиться',   icon: <Lightning weight="fill" size={22} /> },
   { id: 'progress', label: 'Прогресс',  icon: <ChartBar weight="fill" size={22} /> },
+  { id: 'map',      label: 'Карта',     icon: <House weight="fill" size={22} /> },
   { id: 'settings', label: 'Настройки', icon: <Gear weight="fill" size={22} /> },
 ];
 

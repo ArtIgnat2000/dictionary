@@ -205,9 +205,7 @@ export const WordBuilder: React.FC<WordBuilderProps> = ({ word, onResult }) => {
 
   useEffect(() => {
     const letters = word.text.split('');
-    // Add 3 decoy letters
-    const decoys = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'.split('').filter(l => !letters.includes(l));
-    const pool = [...letters, ...decoys.slice(0, 3)].sort(() => Math.random() - 0.5);
+    const pool = [...letters].sort(() => Math.random() - 0.5);
     shuffled.current = pool;
     setAvailable(pool.map(letter => ({ letter, used: false })));
     setPlaced(Array(word.text.length).fill(null));
