@@ -30,7 +30,7 @@ const RusKeyboard: React.FC<KeyboardProps> = ({ onKey, disabled }) => (
             disabled={disabled}
             className="flex items-center justify-center rounded-[10px] font-semibold border-none cursor-pointer"
             style={{
-              flex: k === '⌫' ? '1.5' : '1',
+              flex: k === '⌫' ? 1.5 : 1,
               minWidth: 0,
               height: 52,
               background: k === '⌫' ? 'var(--glass-bg)' : 'var(--glass-bg-strong)',
@@ -39,7 +39,6 @@ const RusKeyboard: React.FC<KeyboardProps> = ({ onKey, disabled }) => (
               fontWeight: 600,
               boxShadow: '0 2px 6px rgba(0,0,0,0.13)',
               borderBottom: '2px solid var(--glass-border-subtle)',
-              flexShrink: 0,
             }}
           >
             {k}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Component, type ErrorInfo, type ReactNode } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ResponsiveShell, type NavPage } from './components/Layout';
 import { WorldMap } from './components/WorldMap';
@@ -65,6 +65,35 @@ const Onboarding: React.FC<{ onDone: () => void }> = ({ onDone }) => {
   );
 };
 
+// ─── Error Boundary ──────────────────────────────────────────────────────────
+interface EBState { error: Error | null }
+class ErrorBoundary extends Component<{ children: ReactNode }, EBState> {
+  state: EBState = { error: null };
+  static getDerivedStateFromError(error: Error): EBState { return { error }; }
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error('[AppError]', error, info);
+  }
+  render() {
+    if (this.state.error) {
+      return (
+        <div style={{ padding: 24, fontFamily: 'system-ui', color: '#c00', background: '#fff', minHeight: '100vh' }}>
+          <h2>Ошибка приложения</h2>
+          <pre style={{ fontSize: 13, whiteSpace: 'pre-wrap', color: '#333' }}>
+            {this.state.error.message}
+          </pre>
+          <button
+            onClick={() => { localStorage.clear(); window.location.reload(); }}
+            style={{ marginTop: 16, padding: '10px 20px', background: '#c00', color: '#fff', border: 'none', borderRadius: 8, cursor: 'pointer' }}
+          >
+            Очистить данные и перезагрузить
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 const AppContent: React.FC = () => {
   useTheme();
 
@@ -73,7 +102,14 @@ const AppContent: React.FC = () => {
 
   const [page, setPage] = useState<NavPage>('map');
   const [sessionGrade, setSessionGrade] = useState<number | null>(null);
-  const [onboarded, setOnboarded] = useState(() => !!localStorage.getItem('slovo-settings') && !!JSON.parse(localStorage.getItem('slovo-settings') || '{}')?.state?.childName);
+  const [onboarded, setOnboarded] = useState(() => {
+    try {
+      const raw = localStorage.getItem('slovo-settings');
+      return !!raw && !!JSON.parse(raw)?.state?.childName;
+    } catch {
+      return false;
+    }
+  });
 
   const handleStartSession = (grade: number) => {
     setSessionGrade(grade);
@@ -138,9 +174,11 @@ const AppContent: React.FC = () => {
 };
 
 const App: React.FC = () => (
-  <MascotProvider>
-    <AppContent />
-  </MascotProvider>
+  <ErrorBoundary>
+    <MascotProvider>
+      <AppContent />
+    </MascotProvider>
+  </ErrorBoundary>
 );
 
 export default App;
