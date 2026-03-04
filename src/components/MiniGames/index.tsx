@@ -61,6 +61,7 @@ export const Dictation: React.FC<DictationProps> = ({ word, onResult }) => {
   const [revealed, setRevealed] = useState(false);
 
   const speak = () => {
+    if (!window.speechSynthesis) return;
     const utterance = new SpeechSynthesisUtterance(word.text);
     utterance.lang = 'ru-RU';
     utterance.rate = 0.85;
@@ -68,11 +69,11 @@ export const Dictation: React.FC<DictationProps> = ({ word, onResult }) => {
   };
 
   useEffect(() => {
-    window.speechSynthesis.cancel(); // clear any queued utterances from previous card
+    window.speechSynthesis?.cancel(); // clear any queued utterances from previous card
     const t = setTimeout(() => speak(), 150); // small delay so cancel completes first
     return () => {
       clearTimeout(t);
-      window.speechSynthesis.cancel(); // cancel on unmount
+      window.speechSynthesis?.cancel(); // cancel on unmount
     };
   }, [word.id]);
 
