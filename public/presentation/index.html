@@ -230,6 +230,32 @@
       line-height: 1;
     }
     .theme-btn:hover { background: rgba(56,189,248,.15); }
+
+    /* ── Tooltip ── */
+    .tip-box {
+      position: fixed;
+      z-index: 1000;
+      max-width: 340px;
+      background: var(--card);
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      padding: .9rem 1.1rem;
+      font-size: .88rem;
+      color: var(--subtle);
+      line-height: 1.6;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity .2s, transform .2s;
+      box-shadow: 0 8px 32px rgba(0,0,0,.5);
+    }
+    .tip-box.visible { opacity: 1; transform: translateY(0); }
+    .tip-box strong {
+      display: block;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: .4rem;
+    }
   </style>
 </head>
 <body>
@@ -763,7 +789,7 @@
       ⚙️ Технологии <span class="accent2">разработки</span>
     </h2>
     <div class="cards-col" style="max-width:860px; gap:.75rem;">
-      <div class="card card-row">
+      <div class="card card-row" data-tip-id="tip1">
         <div class="card-icon">⚛️</div>
         <div style="flex:1;">
           <h3 class="card-h">React 18 + TypeScript</h3>
@@ -771,7 +797,7 @@
         </div>
         <div class="badge" style="font-size:.75rem;">Frontend</div>
       </div>
-      <div class="card card-row">
+      <div class="card card-row" data-tip-id="tip2">
         <div class="card-icon">⚡</div>
         <div style="flex:1;">
           <h3 class="card-h">Vite 7 + Tailwind CSS v4</h3>
@@ -779,7 +805,7 @@
         </div>
         <div class="badge" style="font-size:.75rem;">Tooling</div>
       </div>
-      <div class="card card-row">
+      <div class="card card-row" data-tip-id="tip3">
         <div class="card-icon">🐻</div>
         <div style="flex:1;">
           <h3 class="card-h">Zustand + persist</h3>
@@ -787,7 +813,7 @@
         </div>
         <div class="badge purple" style="font-size:.75rem;">State</div>
       </div>
-      <div class="card card-row">
+      <div class="card card-row" data-tip-id="tip4">
         <div class="card-icon">🎬</div>
         <div style="flex:1;">
           <h3 class="card-h">Framer Motion</h3>
@@ -795,7 +821,7 @@
         </div>
         <div class="badge green" style="font-size:.75rem;">Animation</div>
       </div>
-      <div class="card card-row">
+      <div class="card card-row" data-tip-id="tip5">
         <div class="card-icon">🔊</div>
         <div style="flex:1;">
           <h3 class="card-h">Web Audio API + Web Speech API</h3>
@@ -803,7 +829,7 @@
         </div>
         <div class="badge orange" style="font-size:.75rem;">Audio</div>
       </div>
-      <div class="card card-row">
+      <div class="card card-row" data-tip-id="tip6">
         <div class="card-icon">🚀</div>
         <div style="flex:1;">
           <h3 class="card-h">GitHub Actions → GitHub Pages</h3>
@@ -1035,6 +1061,38 @@
     document.documentElement.setAttribute('data-theme', 'light');
     document.getElementById('themeBtn').textContent = '🌙';
   }
+
+  // ── Tooltips для слайда 12 ──
+  const TIPS = {
+    tip1: `<strong>React 18 + TypeScript</strong>React — библиотека от Meta для построения интерфейса из компонентов. Каждый экран (игра, словарь, прогресс) — отдельный компонент. TypeScript добавляет проверку типов: не даст передать число туда, где ожидается текст. Как спелл-чекер, но для кода.`,
+    tip2: `<strong>Vite 7 + Tailwind CSS v4</strong>Vite — инструмент сборки: собирает все файлы проекта в один быстрый пакет для браузера. Изменения в коде появляются мгновенно. Tailwind CSS — готовые классы стилей прямо в HTML (rounded-xl, text-blue-500). Отдельные CSS-файлы писать не нужно.`,
+    tip3: `<strong>Zustand + persist</strong>Zustand — лёгкое хранилище данных приложения: выбранный класс, прогресс, статистика. Плагин persist автоматически сохраняет всё в localStorage браузера — как блокнот, данные остаются после закрытия вкладки. Сервер не нужен.`,
+    tip4: `<strong>Framer Motion</strong>Библиотека анимаций с физическими эффектами: пружина, инерция, перетаскивание. Обеспечивает плавные переходы между экранами и «пружинку» при появлении карточек. Отвечает за перетаскивание маскота-совы пальцем или мышью.`,
+    tip5: `<strong>Web Audio API + Web Speech API</strong>Встроенные возможности любого современного браузера — без сторонних библиотек. Web Audio воспроизводит звуковые эффекты (правильный ответ, ошибка). Web Speech синтезирует речь: браузер сам произносит слово по-русски, чтобы ученик слышал правильное произношение.`,
+    tip6: `<strong>GitHub Actions → GitHub Pages</strong>GitHub — облачное хранилище кода. Actions автоматически собирает и публикует сайт при каждом обновлении кода (это называется CI/CD). Pages — бесплатный хостинг от GitHub. Цикл «сохранил код → сайт обновился» занимает около одной минуты.`
+  };
+
+  const tipEl = document.getElementById('tipBox');
+  let tipTimer;
+  document.querySelectorAll('[data-tip-id]').forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      clearTimeout(tipTimer);
+      tipTimer = setTimeout(() => {
+        tipEl.innerHTML = TIPS[card.dataset.tipId] || '';
+        tipEl.classList.add('visible');
+        const r = card.getBoundingClientRect();
+        tipEl.style.left = Math.min(r.left, window.innerWidth - 352) + 'px';
+        const th = tipEl.offsetHeight;
+        const below = r.bottom + 10;
+        tipEl.style.top = (below + th < window.innerHeight - 12 ? below : r.top - th - 10) + 'px';
+      }, 200);
+    });
+    card.addEventListener('mouseleave', () => {
+      clearTimeout(tipTimer);
+      tipEl.classList.remove('visible');
+    });
+  });
 </script>
+<div id="tipBox" class="tip-box"></div>
 </body>
 </html>
