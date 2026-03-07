@@ -194,6 +194,42 @@
       .split { flex-direction:column; }
       .split .right { display:none; }
     }
+
+    /* ── Light theme ── */
+    html[data-theme="light"] {
+      --bg:      #f0f4f8;
+      --surface: #e2e8f0;
+      --card:    #ffffff;
+      --border:  #cbd5e1;
+      --accent:  #0284c7;
+      --accent2: #6366f1;
+      --accent3: #059669;
+      --orange:  #ea580c;
+      --text:    #0f172a;
+      --muted:   #64748b;
+      --subtle:  #334155;
+    }
+    html[data-theme="light"] .card {
+      box-shadow: 0 4px 16px rgba(0,0,0,.1);
+    }
+    html[data-theme="light"] .phone {
+      box-shadow: 0 16px 48px rgba(0,0,0,.18), 0 0 0 1px #94a3b8;
+    }
+
+    /* ── Theme toggle button ── */
+    .theme-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: .45rem .75rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background .2s;
+      font-family: inherit;
+      line-height: 1;
+    }
+    .theme-btn:hover { background: rgba(56,189,248,.15); }
   </style>
 </head>
 <body>
@@ -944,6 +980,7 @@
   <button class="nav-btn" id="prevBtn" onclick="prevSlide()" disabled>← Назад</button>
   <span id="slide-info">1 / 15</span>
   <button class="nav-btn" id="nextBtn" onclick="nextSlide()">Вперёд →</button>
+  <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Сменить тему">☀️</button>
 </div>
 
 <script>
@@ -983,6 +1020,21 @@
   // Restore position
   const saved = parseInt(localStorage.getItem('slovo-prez') || '0');
   if (saved > 0 && saved < total) go(saved);
+
+  // Theme toggle
+  function toggleTheme() {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    const next = isLight ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    document.getElementById('themeBtn').textContent = next === 'light' ? '🌙' : '☀️';
+    localStorage.setItem('slovo-theme', next);
+  }
+  // Restore theme
+  const savedTheme = localStorage.getItem('slovo-theme') || 'dark';
+  if (savedTheme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    document.getElementById('themeBtn').textContent = '🌙';
+  }
 </script>
 </body>
 </html>
