@@ -1072,7 +1072,14 @@
     tip6: `<strong>GitHub Actions → GitHub Pages</strong>GitHub — облачное хранилище кода. Actions автоматически собирает и публикует сайт при каждом обновлении кода (это называется CI/CD). Pages — бесплатный хостинг от GitHub. Цикл «сохранил код → сайт обновился» занимает около одной минуты.`
   };
 
-  const tipEl = document.getElementById('tipBox');
+  // создаём tipBox программно, чтобы он точно был в DOM до использования
+  let tipEl = document.getElementById('tipBox');
+  if (!tipEl) {
+    tipEl = document.createElement('div');
+    tipEl.id = 'tipBox';
+    tipEl.className = 'tip-box';
+    document.body.appendChild(tipEl);
+  }
   let tipTimer;
   document.querySelectorAll('[data-tip-id]').forEach(card => {
     card.addEventListener('mouseenter', () => {
@@ -1093,6 +1100,5 @@
     });
   });
 </script>
-<div id="tipBox" class="tip-box"></div>
 </body>
 </html>
