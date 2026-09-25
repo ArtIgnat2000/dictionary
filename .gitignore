@@ -8,3 +8,4 @@ info/
 
 # v2 (slovo2)
 dev-dist/
+.tools/
