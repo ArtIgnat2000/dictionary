@@ -21,8 +21,9 @@ function pickDanger(w: Word): number {
   return w.danger[Math.floor(Math.random() * w.danger.length)] ?? Math.floor(w.text.length / 2);
 }
 
-function letterOptions(correct: string, kind: Word['dangerKind']): string[] {
-  const pool = kind === 'consonant' ? CONSONANTS : VOWELS;
+function letterOptions(correct: string): string[] {
+  // Варианты подбираем по самой букве: гласные — к гласным, согласные — к согласным
+  const pool = VOWELS.includes(correct) ? VOWELS : CONSONANTS;
   const set = new Set<string>([correct]);
   let guard = 0;
   while (set.size < 4 && guard++ < 50) set.add(pool[Math.floor(Math.random() * pool.length)]);
@@ -53,17 +54,28 @@ function wrongVariants(w: Word, dangerIdx: number, count: number): string[] {
   return all.slice(0, count + 1);
 }
 
-export function makeTask(kind: TaskKind, wordId: string, reason: Task['reason'], dangerIdx: number): Task {
+export /**
+ * Фразы («до свидания») нельзя собирать из букв и печатать — для них остаются
+ * задания с выбором: окошко, исправь ошибку, знакомство, слоги.
+ */
+function safeKind(kind: TaskKind, wordId: string): TaskKind {
   const w = WORD_BY_ID[wordId];
-  const t: Task = { uid: uid(), kind, wordId, reason, dangerIdx };
-  if (kind === 'gap') t.options = letterOptions(w.text[dangerIdx], w.dangerKind);
-  if (kind === 'build') t.letters = buildLetters(w);
-  if (kind === 'fix') {
+  if (!w.text.includes(' ')) return kind;
+  return kind === 'fix' || kind === 'gap' ? kind : 'gap';
+}
+
+export function makeTask(kind: TaskKind, wordId: string, reason: Task['reason'], dangerIdx: number): Task {
+  const kind0 = safeKind(kind, wordId);
+  const w = WORD_BY_ID[wordId];
+  const t: Task = { uid: uid(), kind: kind0, wordId, reason, dangerIdx };
+  if (kind0 === 'gap') t.options = letterOptions(w.text[dangerIdx]);
+  if (kind0 === 'build') t.letters = buildLetters(w);
+  if (kind0 === 'fix') {
     const variants = wrongVariants(w, dangerIdx, 2);
     t.options = variants;
     t.wrong = variants.find((v) => v !== w.text) ?? w.text;
   }
-  if (kind === 'visual') t.showMs = 1200 + w.text.length * 220;
+  if (kind0 === 'visual') t.showMs = 1200 + w.text.length * 220;
   return t;
 }
 

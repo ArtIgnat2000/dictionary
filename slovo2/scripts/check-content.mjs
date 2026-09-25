@@ -39,7 +39,9 @@ for (const row of rows) {
 
   if (!VOWELS.includes(text[Number(stress)] ?? '')) fail(`ударение (${stress}) стоит не на гласной`);
 
-  if (syll.split('-').join('') !== text) fail(`слоги «${syll}» не складываются в «${text}»`);
+  const noSpaces = (x) => x.replace(/\s+/g, '');
+  if (noSpaces(syll.split('-').join('')) !== noSpaces(text))
+    fail(`слоги «${syll}» не складываются в «${text}»`);
 
   for (const d of danger.split(',').map(Number)) {
     if (Number.isNaN(d) || d < 0 || d >= text.length) fail(`опасный индекс ${d} вне слова`);
