@@ -16,8 +16,9 @@ BRANCH="main"
 cd "$(dirname "$0")/.."
 
 echo "▸ Проверяю доступ к $REPO_URL ..."
-if ! git ls-remote --exit-code "$REPO_URL" >/dev/null 2>&1; then
-  echo "✗ Нет доступа к репозиторию slovo2 (или он пуст)."
+# NB: без --exit-code — пустой репозиторий (без refs) это нормально, а не ошибка.
+if ! git ls-remote "$REPO_URL" >/dev/null 2>&1; then
+  echo "✗ Нет доступа к репозиторию slovo2."
   echo "  Дайте приложению Arena доступ к ArtIgnat2000/slovo2 и повторите."
   exit 1
 fi
